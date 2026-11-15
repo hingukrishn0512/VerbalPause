@@ -6,20 +6,21 @@
 <title>VerbalPause — Adversarial Voice AI Negotiation Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-main: #0c0d10;
-    --bg-card: #15171c;
-    --bg-surface: #1e2027;
-    --bg-input: #121317;
-    --bg-hover: #262933;
-    --border: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.22);
+    --bg-main: #0a0b0d;
+    --bg-card: #121418;
+    --bg-surface: #1a1d24;
+    --bg-input: #0f1014;
+    --bg-hover: #222630;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.18);
     --text-primary: #ffffff;
-    --text-secondary: #a0a4b0;
-    --text-muted: #6e7382;
-    --accent: #ffffff;
+    --text-secondary: #9ea3b0;
+    --text-muted: #656a79;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.35);
     --danger: #ef4444;
     --warning: #f59e0b;
     --success: #10b981;
@@ -39,57 +40,109 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* App Header */
+  /* Header */
   header {
-    height: 56px;
-    padding: 0 20px;
+    height: 60px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
-    background: #090a0c;
+    background: rgba(10, 11, 13, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 50;
   }
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
+    gap: 12px;
+    font-weight: 800;
     font-size: 16px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
   }
   .brand-icon {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     background: #ffffff;
     color: #000000;
-    border-radius: 7px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 900;
     font-size: 13px;
   }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .nav-link:hover { color: var(--text-primary); }
   .header-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
   .btn-ghost {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-secondary);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12.5px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .btn-ghost:hover {
     background: var(--bg-surface);
     color: var(--text-primary);
     border-color: var(--border-strong);
+  }
+  .btn-primary {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary:hover {
+    background: #e2e4e9;
+    transform: translateY(-1px);
+  }
+  .streak-badge {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 
   /* Main Container */
@@ -98,42 +151,453 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 24px 18px 40px;
-    position: relative;
   }
+
   .panel-view {
     display: none;
-    width: 100%;
-    max-width: 900px;
     flex-direction: column;
-    gap: 24px;
-    animation: fadeIn 0.2s ease;
+    min-height: 100%;
   }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- VIEW 1: PERSONA SELECTOR --- */
-  .section-hero {
+  /* =========================================================
+     VIEW 0: PUBLIC MARKETING LANDING PAGE
+     ========================================================= */
+  .landing-hero {
+    padding: 72px 24px 56px;
+    max-width: 1040px;
+    margin: 0 auto;
     text-align: center;
-    max-width: 640px;
-    margin: 10px auto 20px;
   }
-  .section-hero h1 {
-    font-size: 28px;
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+  .hero-pill span { color: #3b82f6; }
+  .landing-hero h1 {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    margin-bottom: 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #a5abb8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .landing-hero p {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 36px;
+  }
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .btn-hero-primary {
+    background: #ffffff;
+    color: #000000;
+    padding: 13px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-hero-primary:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.2);
+  }
+  .btn-hero-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+    padding: 13px 26px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-hero-secondary:hover {
+    background: var(--bg-surface);
+  }
+
+  /* Audio Preview Bar */
+  .audio-preview-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 18px 24px;
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-align: left;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+  }
+  .audio-preview-info h4 { font-size: 14px; font-weight: 700; }
+  .audio-preview-info p { font-size: 12.5px; color: var(--text-secondary); margin: 2px 0 0; }
+  .btn-play-preview {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .btn-play-preview:hover { background: #e2e8f0; }
+
+  /* Metric Ticker */
+  .metrics-grid {
+    max-width: 1040px;
+    margin: 32px auto 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 0 24px;
+  }
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .metric-card .num {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+  }
+  .metric-card .label {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Comparison Section */
+  .comparison-section {
+    max-width: 1040px;
+    margin: 40px auto 60px;
+    padding: 0 24px;
+  }
+  .section-title {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .section-title h2 {
+    font-size: 32px;
     font-weight: 800;
     letter-spacing: -0.03em;
     margin-bottom: 8px;
   }
-  .section-hero p {
+  .section-title p {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+  .comparison-table-wrap {
+    overflow-x: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    text-align: left;
+  }
+  .comp-table th, .comp-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table th {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table .winner {
+    background: rgba(59, 130, 246, 0.06);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Pricing Cards */
+  .pricing-grid {
+    max-width: 1040px;
+    margin: 0 auto 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 0 24px;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .pricing-card.featured {
+    border-color: #ffffff;
+    background: #14171e;
+    box-shadow: 0 0 0 1px #ffffff, 0 15px 30px rgba(0,0,0,0.5);
+  }
+  .pricing-badge {
+    position: absolute;
+    top: -11px;
+    right: 24px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .pricing-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .pricing-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+  .pricing-card .price { font-size: 36px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 20px; }
+  .pricing-card .price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .pricing-features li::before {
+    content: "✓";
+    color: #10b981;
+    font-weight: 900;
+    margin-right: 8px;
+  }
+  .pricing-card .btn-tier {
+    margin-top: auto;
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-tier.primary { background: #ffffff; color: #000000; }
+  .btn-tier.primary:hover { background: #e2e8f0; }
+  .btn-tier.secondary { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-tier.secondary:hover { background: var(--bg-hover); }
+
+  /* Landing Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 36px 24px;
+    background: #08090b;
+    margin-top: auto;
+  }
+  .footer-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* =========================================================
+     VIEW 1: USER DASHBOARD
+     ========================================================= */
+  .dashboard-container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 36px 24px 60px;
+    width: 100%;
+  }
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .dash-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .dash-header p {
     font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .dash-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .dash-stat-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dash-stat-box .title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+  .dash-stat-box .value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-top: 6px;
+    color: var(--text-primary);
+  }
+
+  /* AI Improvement Card */
+  .improvement-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(18, 20, 24, 0.9) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .improvement-icon {
+    width: 36px;
+    height: 36px;
+    background: #3b82f6;
+    color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .improvement-content h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .improvement-content p {
+    font-size: 13.5px;
     color: var(--text-secondary);
     line-height: 1.5;
   }
 
-  /* Preset Grid */
+  /* Recent Sessions Table */
+  .sessions-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .sessions-card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sessions-card-header h3 { font-size: 16px; font-weight: 700; }
+  .table-responsive { overflow-x: auto; }
+  .dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+  .dash-table th, .dash-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dash-table th {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .dash-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+  .dash-table tr:last-child td { border-bottom: none; }
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .score-high { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+  .score-mid { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+  .score-low { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+  /* =========================================================
+     VIEW 2: PERSONA SELECTOR (THE ARENA)
+     ========================================================= */
+  .arena-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 36px 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .arena-hero { text-align: left; }
+  .arena-hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .arena-hero p { font-size: 14px; color: var(--text-secondary); margin-top: 6px; }
   .presets-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
   .persona-card {
@@ -141,11 +605,11 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
     position: relative;
   }
   .persona-card:hover {
@@ -165,28 +629,28 @@
   .persona-avatar {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background: #2a2d37;
-    color: #ffffff;
+    border-radius: 10px;
+    background: var(--bg-hover);
+    color: var(--text-primary);
     font-weight: 700;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
+    border: 1px solid var(--border);
   }
-  .persona-title h3 { font-size: 15px; font-weight: 600; }
-  .persona-title p { font-size: 12.5px; color: var(--text-secondary); }
+  .persona-title h3 { font-size: 15px; font-weight: 700; }
+  .persona-title p { font-size: 12.5px; color: var(--text-muted); }
   .difficulty-badge {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 11px;
+    top: 16px;
+    right: 16px;
+    font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 6px;
     letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 4px;
   }
   .badge-brutal { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
   .badge-hard { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
@@ -209,266 +673,250 @@
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
   .field input, .field textarea {
     background: var(--bg-input);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 10px 12px;
-    color: #ffffff;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 13.5px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border 0.15s;
   }
-  .field input:focus, .field textarea:focus { border-color: #ffffff; }
+  .field input:focus, .field textarea:focus { border-color: var(--border-strong); }
 
-  .btn-primary {
+  /* =========================================================
+     VIEW 3: LIVE VOICE CALL SIMULATION
+     ========================================================= */
+  .call-header {
+    height: 64px;
+    padding: 0 24px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .call-prospect { display: flex; align-items: center; gap: 12px; }
+  .call-prospect-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     background: #ffffff;
     color: #000000;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: inline-flex;
+    font-weight: 800;
+    font-size: 13px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
   }
-  .btn-primary:hover { background: #e5e5e5; }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .call-prospect-info h3 { font-size: 14.5px; font-weight: 700; }
+  .call-prospect-info p { font-size: 12px; color: var(--text-muted); }
 
-  /* --- VIEW 2: LIVE CALL ROOM --- */
-  .call-room-header {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 24px;
+  /* Emotion Telemetry Header Gauges */
+  .telemetry-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 20px;
   }
-  .call-prospect-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .call-prospect-info h2 { font-size: 18px; font-weight: 700; }
-  .call-prospect-info p { font-size: 13px; color: var(--text-secondary); }
-  .call-controls { display: flex; align-items: center; gap: 12px; }
-
-  /* Emotion Gauges */
-  .gauges-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-  }
-  .gauge-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .gauge-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+  .gauge-item { display: flex; flex-direction: column; gap: 4px; min-width: 90px; }
+  .gauge-meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-muted); }
   .gauge-track {
-    width: 100%;
-    height: 8px;
-    background: var(--bg-input);
-    border-radius: 4px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
     overflow: hidden;
   }
-  .gauge-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s ease, background-color 0.3s ease;
-  }
+  .gauge-fill { height: 100%; transition: width 0.3s ease, background 0.3s ease; }
+  .gauge-fill.patience { background: #10b981; }
+  .gauge-fill.skepticism { background: #f59e0b; }
+  .gauge-fill.leverage { background: #3b82f6; }
 
   /* Interruption Banner */
   .interruption-alert {
-    display: none;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-size: 13.5px;
+    background: rgba(239, 68, 68, 0.12);
+    border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 10px 24px;
+    color: #f87171;
+    font-size: 13px;
     font-weight: 600;
+    display: none;
     align-items: center;
-    gap: 10px;
-    animation: shake 0.3s ease;
+    justify-content: center;
+    gap: 8px;
+    animation: pulse 1.5s infinite;
   }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
-  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
   /* Waveform Visualizer */
-  .visualizer-container {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 30px;
+  .visualizer-strip {
+    height: 70px;
+    background: #090a0d;
+    border-bottom: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    min-height: 220px;
-    position: relative;
+    gap: 8px;
+    flex-shrink: 0;
   }
-  .waveform-bars {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    height: 60px;
-  }
+  .waveform-bars { display: flex; align-items: center; gap: 4px; height: 26px; }
   .waveform-bar {
-    width: 6px;
-    background: #ffffff;
-    border-radius: 3px;
-    height: 12px;
+    width: 3.5px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
     transition: height 0.1s ease;
   }
   .waveform-bar.active {
-    animation: pulseWave 0.6s infinite alternate ease-in-out;
+    background: #ffffff;
+    animation: wave 0.8s ease-in-out infinite alternate;
   }
-  @keyframes pulseWave {
-    from { height: 8px; }
-    to { height: 50px; }
-  }
-  .call-status-pill {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    padding: 5px 14px;
-    border-radius: 20px;
-  }
+  .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+  .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+  .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+  .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+  .waveform-bar:nth-child(6) { animation-delay: 0.25s; }
+  .waveform-bar:nth-child(7) { animation-delay: 0.15s; }
+  @keyframes wave { 0% { height: 6px; } 100% { height: 26px; } }
+  .agent-status-label { font-size: 11.5px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 
-  /* Live Transcript Stream */
+  /* Transcript Live Stream */
   .transcript-stream {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    max-height: 240px;
+    flex: 1;
     overflow-y: auto;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    font-size: 14px;
+    gap: 14px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
   }
   .turn-bubble {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-  }
-  .turn-bubble.user { align-items: flex-end; }
-  .turn-bubble.buyer { align-items: flex-start; }
-  .bubble-text {
-    padding: 8px 14px;
-    border-radius: 12px;
     max-width: 80%;
-    line-height: 1.45;
+    animation: fadeIn 0.2s ease;
   }
-  .turn-bubble.user .bubble-text {
-    background: #27272a;
-    color: #ffffff;
-    border-bottom-right-radius: 2px;
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .turn-bubble.buyer { align-self: flex-start; }
+  .turn-bubble.user { align-self: flex-end; }
+  .turn-bubble .bubble-text {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
   }
   .turn-bubble.buyer .bubble-text {
     background: var(--bg-surface);
-    color: #e4e4e7;
-    border-bottom-left-radius: 2px;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-top-left-radius: 2px;
   }
-  .turn-bubble.interruption .bubble-text {
-    border: 1px solid #ef4444;
-    background: rgba(239, 68, 68, 0.1);
+  .turn-bubble.buyer.interruption .bubble-text {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.08);
   }
-
-  /* Call Bottom Actions */
-  .call-bottom-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .btn-mic {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+  .turn-bubble.user .bubble-text {
     background: #ffffff;
     color: #000000;
-    border: none;
-    cursor: pointer;
+    font-weight: 500;
+    border-top-right-radius: 2px;
+  }
+
+  /* Call Bottom Action Bar */
+  .call-bottom-bar {
+    height: 76px;
+    background: #090a0d;
+    border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: 700;
-    transition: transform 0.15s, background 0.15s;
+    gap: 12px;
+    padding: 0 24px;
     flex-shrink: 0;
   }
-  .btn-mic.listening {
-    background: #ef4444;
+  .btn-mic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
     color: #ffffff;
-    box-shadow: 0 0 18px rgba(239, 68, 68, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-mic:hover { background: var(--bg-hover); transform: scale(1.05); }
+  .btn-mic.recording {
+    background: #ef4444;
+    border-color: #ef4444;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
   }
   .call-text-input {
     flex: 1;
-    background: var(--bg-card);
+    max-width: 600px;
+    background: var(--bg-input);
     border: 1px solid var(--border);
-    border-radius: 26px;
+    border-radius: 24px;
     padding: 12px 20px;
-    color: #ffffff;
-    font-family: inherit;
+    color: var(--text-primary);
     font-size: 14px;
+    font-family: inherit;
     outline: none;
+    transition: border 0.15s;
   }
   .call-text-input:focus { border-color: var(--border-strong); }
 
-  /* --- VIEW 3: LEVERAGE REPLAY & SCORECARD --- */
+  /* =========================================================
+     VIEW 4: POST-CALL LEVERAGE SCORECARD
+     ========================================================= */
+  .scorecard-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+  }
   .scorecard-header {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 24px;
+    padding: 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
   }
   .score-circle {
-    width: 76px;
-    height: 76px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
-    background: var(--bg-surface);
-    border: 3px solid #ffffff;
+    border: 3px solid var(--border-strong);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    font-weight: 800;
+    flex-shrink: 0;
+    background: #0d0e12;
   }
-  .score-circle span { font-size: 10px; color: var(--text-muted); font-weight: 500; }
-
-  /* Turning Points Grid */
+  .score-circle div { font-size: 32px; font-weight: 900; line-height: 1; }
+  .score-circle span { font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 2px; }
   .turning-points-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -495,153 +943,447 @@
   .point-quote {
     font-size: 13.5px;
     font-style: italic;
-    color: #e4e4e7;
-    border-left: 2px solid var(--border-strong);
-    padding-left: 10px;
+    color: var(--text-primary);
+    line-height: 1.45;
   }
-  .point-analysis { font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; }
+  .point-analysis { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; }
 
   /* 1-Click Rewind Sandbox */
-  .sandbox-card {
+  .sandbox-box {
     background: var(--bg-card);
     border: 1px solid var(--border-strong);
     border-radius: 14px;
     padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
   }
-  .sandbox-card h3 { font-size: 16px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; }
-  .sandbox-prompt {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+  .sandbox-prompt-box {
+    background: var(--bg-surface);
+    border-left: 3px solid #f59e0b;
     padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
     font-size: 13.5px;
-    color: #fca5a5;
-    font-weight: 500;
+    font-style: italic;
   }
 
-  @media (max-width: 768px) {
-    .gauges-container, .form-row, .turning-points-grid { grid-template-columns: 1fr; }
+  /* =========================================================
+     MODAL: AUTHENTICATION (SIGN IN & REGISTER)
+     ========================================================= */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+    animation: scaleIn 0.2s ease;
+  }
+  @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-surface);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+  .auth-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .auth-tab-btn.active {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .auth-error {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+    margin-bottom: 12px;
   }
 </style>
 </head>
 <body>
 
+<!-- Header Navigation -->
 <header>
-  <div class="brand">
+  <div class="brand" id="nav-brand">
     <div class="brand-icon">VP</div>
     <span>VerbalPause</span>
   </div>
+
+  <nav class="nav-links">
+    <a class="nav-link" id="nav-link-features">Features</a>
+    <a class="nav-link" id="nav-link-why">Why We Win</a>
+    <a class="nav-link" id="nav-link-pricing">Pricing</a>
+    <a class="nav-link" id="nav-link-arena">Arena</a>
+  </nav>
+
   <div class="header-actions">
     <button class="btn-ghost" id="nav-api-config" title="Configure Backend API URL">⚙️ API URL</button>
-    <button class="btn-ghost" id="nav-new-call" style="display:none;">New Simulation</button>
+    <div id="auth-unauthed" style="display:flex; gap:8px;">
+      <button class="btn-ghost" id="btn-open-login">Sign In</button>
+      <button class="btn-primary" id="btn-open-register">Get Started</button>
+    </div>
+    <div id="auth-authed" style="display:none; align-items:center; gap:10px;">
+      <span class="streak-badge" id="nav-streak-badge">🔥 1-Day Streak</span>
+      <button class="btn-ghost" id="btn-nav-dashboard">Dashboard</button>
+      <button class="btn-ghost" id="btn-nav-logout" title="Sign Out">Sign Out</button>
+    </div>
   </div>
 </header>
 
 <main>
-  <!-- VIEW 1: SELECT OR GENERATE PERSONA -->
-  <section class="panel-view" id="view-persona" style="display:flex;">
-    <div class="section-hero">
-      <h1>Adversarial Voice Roleplay Simulator</h1>
-      <p>Real buyers don't wait patiently. Practice cold calls and price negotiations against AI buyer personas that interrupt, lose patience, and challenge marketing fluff.</p>
+  <!-- =========================================================
+       VIEW 0: PUBLIC MARKETING LANDING PAGE
+       ========================================================= -->
+  <section class="panel-view" id="view-landing" style="display:flex;">
+    <div class="landing-hero">
+      <div class="hero-pill">
+        <span>⚡ TIER-1 AI VOICE ARENA</span> — Trained on $120M+ B2B Negotiations
+      </div>
+      <h1>Real Buyers Don't Wait Patiently.<br>Stop Pitching Polite Bots.</h1>
+      <p>The adversarial sales & negotiation simulator that actively interrupts your monologues, punishes generic marketing fluff, and scores deal leverage in real time.</p>
+      
+      <div class="hero-ctas">
+        <button class="btn-hero-primary" id="btn-hero-arena">⚔️ Enter Voice Arena Free &rarr;</button>
+        <button class="btn-hero-secondary" id="btn-hero-login">Create Candidate Account</button>
+      </div>
+
+      <!-- Live Audio Interruption Preview -->
+      <div class="audio-preview-box">
+        <div class="audio-preview-info">
+          <h4>Hear the Adversarial Interruption Engine</h4>
+          <p>Marcus Vance (VP of Eng) cutting off an account executive's monologue.</p>
+        </div>
+        <button class="btn-play-preview" id="btn-play-preview">🔊 Play 10s Demo</button>
+      </div>
     </div>
 
-    <div class="presets-grid" id="presets-container"></div>
+    <!-- Metric Ticker -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="num">+34%</div>
+        <div class="label">Demo-to-Close Win Rate Lift</div>
+      </div>
+      <div class="metric-card">
+        <div class="num">&lt;600ms</div>
+        <div class="label">Ultra-Low Voice Latency</div>
+      </div>
+      <div class="metric-card">
+        <div class="num">30 Sec</div>
+        <div class="label">Instant Web Persona Synthesizer</div>
+      </div>
+      <div class="metric-card">
+        <div class="num">10x</div>
+        <div class="label">Cheaper than $20k LMS Contracts</div>
+      </div>
+    </div>
 
-    <div class="custom-gen-box">
-      <h3><span>⚡</span> 30-Second Custom Persona Synthesizer</h3>
-      <p style="font-size:13px; color:var(--text-secondary); margin-top:-6px;">Paste any prospect company website and title. Our pipeline extracts their tech stack, hidden pain points, and budget friction in seconds.</p>
+    <!-- Comparison Section -->
+    <section class="comparison-section" id="section-comparison">
+      <div class="section-title">
+        <h2>Why Existing Solutions Fall Short</h2>
+        <p>Enterprise roleplay tools lock you into slow contracts with polite bots. Here is how VerbalPause wins.</p>
+      </div>
 
-      <div class="form-row">
-        <div class="field">
-          <label for="custom-company">Target Company Name or URL</label>
-          <input id="custom-company" placeholder="e.g. Stripe, Linear, Datadog">
+      <div class="comparison-table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Second Nature / Legacy LMS</th>
+              <th>Generic Bots (ChatGPT Voice)</th>
+              <th class="winner">VerbalPause AI Arena</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Setup Time & Pricing</strong></td>
+              <td>$20k+/yr minimums, 2-month onboarding</td>
+              <td>Consumer toy, no sales context</td>
+              <td class="winner">Self-serve in 30 seconds, transparent pricing</td>
+            </tr>
+            <tr>
+              <td><strong>Buyer Psychology</strong></td>
+              <td>Waits patiently, scripted tree follow-ups</td>
+              <td>Polite, agreeable, caves immediately</td>
+              <td class="winner">Interrupts monologues, tracks Patience & Skepticism</td>
+            </tr>
+            <tr>
+              <td><strong>Custom Persona Creation</strong></td>
+              <td>Manual vendor custom builds</td>
+              <td>Generic system prompts</td>
+              <td class="winner">Paste company URL & role $\to$ auto-researched via Tavily</td>
+            </tr>
+            <tr>
+              <td><strong>Post-Call Feedback</strong></td>
+              <td>Counts "ums" & words per minute</td>
+              <td>None</td>
+              <td class="winner">Moment-by-Moment Deal Leverage + 1-Click Re-Pitch Sandbox</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="comparison-section" id="section-pricing">
+      <div class="section-title">
+        <h2>Transparent, Self-Serve Pricing</h2>
+        <p>Start free. Upgrade as you scale your team.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Pioneer</h3>
+          <p>For solo SDRs & founders getting started.</p>
+          <div class="price">$0 <span>/ forever</span></div>
+          <ul class="pricing-features">
+            <li>Unlimited Preset Personas</li>
+            <li>Real-time Interruption State Machine</li>
+            <li>Basic Post-Call Scorecard</li>
+            <li>Web Speech STT/TTS</li>
+          </ul>
+          <button class="btn-tier secondary" id="btn-tier-free">Start Free Arena</button>
         </div>
-        <div class="field">
-          <label for="custom-role">Prospect Job Title</label>
-          <input id="custom-role" placeholder="e.g. VP of Engineering, Head of Procurement">
+
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most Popular</div>
+          <h3>Pro Closer</h3>
+          <p>For account executives mastering enterprise deals.</p>
+          <div class="price">$49 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li>Everything in Pioneer</li>
+            <li>30-Second Instant Web Persona Synthesizer</li>
+            <li>1-Click Rewind & Re-Pitch Sandbox</li>
+            <li>Full Practice Streak & Performance History</li>
+            <li>AI Diagnostic: Top Weakness Analysis</li>
+          </ul>
+          <button class="btn-tier primary" id="btn-tier-pro">Get Pro Closer</button>
+        </div>
+
+        <div class="pricing-card">
+          <h3>Dealmaker Team</h3>
+          <p>For sales leaders coaching revenue teams.</p>
+          <div class="price">$199 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li>5 AE Seats included</li>
+            <li>Custom Objection & Outage Injection</li>
+            <li>Team Analytics Leaderboard</li>
+            <li>Gong & Salesforce CRM Sync</li>
+          </ul>
+          <button class="btn-tier secondary" id="btn-tier-team">Contact Sales</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Landing Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div>&copy; 2026 VerbalPause — Adversarial Voice AI Negotiation Arena.</div>
+        <div style="display:flex; gap:16px;">
+          <span>🟢 Voice & State Engines Operational</span>
+          <a href="/docs" target="_blank" style="color:var(--text-secondary); text-decoration:none;">API Docs</a>
+        </div>
+      </div>
+    </footer>
+  </section>
+
+  <!-- =========================================================
+       VIEW 1: PERSONAL USER DASHBOARD
+       ========================================================= -->
+  <section class="panel-view" id="view-dashboard">
+    <div class="dashboard-container">
+      <div class="dash-header">
+        <div>
+          <h1 id="dash-greeting">Welcome back, Closer</h1>
+          <p id="dash-streak-sub">Keep your daily practice streak alive.</p>
+        </div>
+        <button class="btn-primary" id="btn-dash-start-arena" style="padding:10px 20px; font-size:14px;">⚔️ Enter Voice Arena</button>
+      </div>
+
+      <!-- AI Improvement Area Diagnostic -->
+      <div class="improvement-card">
+        <div class="improvement-icon">🎯</div>
+        <div class="improvement-content">
+          <h3>AI Diagnostic: Key Improvement Focus</h3>
+          <p id="dash-improvement-text">Complete your first simulation call to generate your personalized weakness analysis.</p>
         </div>
       </div>
 
-      <div class="field">
-        <label for="custom-context">Additional Context / Product Value Prop (Optional)</label>
-        <textarea id="custom-context" rows="2" placeholder="e.g. Pitching our $40k/yr automated observability platform; they had an outage last quarter."></textarea>
+      <!-- KPI Metrics -->
+      <div class="dash-stats-grid">
+        <div class="dash-stat-box">
+          <div class="title">Practice Streak</div>
+          <div class="value" id="dash-stat-streak">1 Day 🔥</div>
+        </div>
+        <div class="dash-stat-box">
+          <div class="title">Completed Sessions</div>
+          <div class="value" id="dash-stat-sessions">0</div>
+        </div>
+        <div class="dash-stat-box">
+          <div class="title">Average Score</div>
+          <div class="value" id="dash-stat-avg-score">0 / 100</div>
+        </div>
+        <div class="dash-stat-box">
+          <div class="title">Deal Win Rate</div>
+          <div class="value" id="dash-stat-win-rate">0%</div>
+        </div>
       </div>
 
-      <button class="btn-primary" id="btn-generate-persona">Generate Custom Prospect & Start Roleplay &rarr;</button>
+      <!-- Past Sessions Table -->
+      <div class="sessions-card">
+        <div class="sessions-card-header">
+          <h3>Simulation History</h3>
+          <span style="font-size:12px; color:var(--text-muted);" id="dash-sessions-count">0 sessions recorded</span>
+        </div>
+        <div class="table-responsive">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Buyer Persona</th>
+                <th>Outcome</th>
+                <th>Score</th>
+                <th>Questions Asked</th>
+                <th>Duration</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="dash-sessions-tbody">
+              <tr>
+                <td colspan="6" style="text-align:center; color:var(--text-muted); padding:32px;">No sessions completed yet. Jump into the arena to record your first call!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- VIEW 2: LIVE VOICE CALL ROOM -->
+  <!-- =========================================================
+       VIEW 2: PERSONA SELECTOR & ARENA ENTRY
+       ========================================================= -->
+  <section class="panel-view" id="view-persona">
+    <div class="arena-wrapper">
+      <div class="arena-hero">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h1>Adversarial Roleplay Arena</h1>
+            <p>Select an adversarial buyer or synthesize a custom enterprise persona from any URL in 30 seconds.</p>
+          </div>
+          <button class="btn-ghost" id="btn-back-to-dash">← Back to Dashboard</button>
+        </div>
+      </div>
+
+      <!-- Preset Buyer Cards -->
+      <div class="presets-grid" id="presets-container"></div>
+
+      <!-- 30-Second Instant Custom Persona Synthesizer -->
+      <div class="custom-gen-box">
+        <h3><span>⚡</span> 30-Second Custom Persona Synthesizer</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-top:-6px;">Paste any prospect company website and title. Our pipeline extracts their tech stack, hidden pain points, and budget friction in seconds.</p>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="custom-company">Target Company Name or URL</label>
+            <input id="custom-company" placeholder="e.g. Stripe, Linear, Datadog">
+          </div>
+          <div class="field">
+            <label for="custom-role">Prospect Job Title</label>
+            <input id="custom-role" placeholder="e.g. VP of Engineering, Head of Procurement">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="custom-context">Additional Context / Product Value Prop (Optional)</label>
+          <textarea id="custom-context" rows="2" placeholder="e.g. Pitching our $40k/yr automated observability platform; they had an outage last quarter."></textarea>
+        </div>
+
+        <button class="btn-primary" id="btn-generate-persona">Generate Custom Prospect & Start Roleplay &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       VIEW 3: LIVE VOICE CALL SIMULATION
+       ========================================================= -->
   <section class="panel-view" id="view-call">
-    <div class="call-room-header">
-      <div class="call-prospect-info">
-        <div class="persona-avatar" id="call-avatar">MV</div>
-        <div>
-          <h2 id="call-name">Marcus Vance</h2>
-          <p id="call-role">VP of Engineering at Apex Cloud Systems</p>
+    <div class="call-header">
+      <div class="call-prospect">
+        <div class="call-prospect-avatar" id="call-avatar">MV</div>
+        <div class="call-prospect-info">
+          <h3 id="call-name">Marcus Vance</h3>
+          <p id="call-role">VP of Engineering @ Apex Cloud</p>
         </div>
       </div>
-      <div class="call-controls">
-        <div class="call-status-pill" id="call-timer">00:00</div>
-        <button class="btn-ghost" id="btn-end-call" style="border-color:#ef4444; color:#f87171;">End Call & Grade</button>
+
+      <!-- Real-Time Emotional State Gauges -->
+      <div class="telemetry-bar">
+        <div class="gauge-item">
+          <div class="gauge-meta"><span>Patience</span><span id="label-patience">100%</span></div>
+          <div class="gauge-track"><div class="gauge-fill patience" id="bar-patience" style="width:100%;"></div></div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-meta"><span>Skepticism</span><span id="label-skepticism">50%</span></div>
+          <div class="gauge-track"><div class="gauge-fill skepticism" id="bar-skepticism" style="width:50%;"></div></div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-meta"><span>Deal Leverage</span><span id="label-leverage">0.0</span></div>
+          <div class="gauge-track"><div class="gauge-fill leverage" id="bar-leverage" style="width:50%;"></div></div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span id="call-timer" style="font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--text-secondary);">00:00</span>
+        <button class="btn-primary" id="btn-end-call" style="background:#ef4444; color:#fff;">End Call & Grade</button>
       </div>
     </div>
 
-    <!-- Emotion State Meters -->
-    <div class="gauges-container">
-      <div class="gauge-card">
-        <div class="gauge-label">
-          <span>Buyer Patience</span>
-          <span id="label-patience">100%</span>
-        </div>
-        <div class="gauge-track">
-          <div class="gauge-fill" id="bar-patience" style="width:100%; background:#10b981;"></div>
-        </div>
-      </div>
-
-      <div class="gauge-card">
-        <div class="gauge-label">
-          <span>Buyer Skepticism</span>
-          <span id="label-skepticism">50%</span>
-        </div>
-        <div class="gauge-track">
-          <div class="gauge-fill" id="bar-skepticism" style="width:50%; background:#f59e0b;"></div>
-        </div>
-      </div>
-
-      <div class="gauge-card">
-        <div class="gauge-label">
-          <span>Deal Leverage</span>
-          <span id="label-leverage">0.0</span>
-        </div>
-        <div class="gauge-track">
-          <div class="gauge-fill" id="bar-leverage" style="width:50%; background:#ffffff;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active Interruption Banner -->
+    <!-- Active Interruption Alert -->
     <div class="interruption-alert" id="interruption-banner">
-      <span>⚠️</span>
-      <span id="interruption-text">The buyer just cut you off for monologuing without asking discovery questions.</span>
+      <span id="interruption-text">⚠️ The buyer interrupted your monologue!</span>
     </div>
 
-    <!-- Waveform Visualizer -->
-    <div class="visualizer-container">
-      <div class="waveform-bars" id="waveform-bars">
-        <div class="waveform-bar"></div><div class="waveform-bar"></div>
-        <div class="waveform-bar"></div><div class="waveform-bar"></div>
-        <div class="waveform-bar"></div><div class="waveform-bar"></div>
-        <div class="waveform-bar"></div><div class="waveform-bar"></div>
-        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+    <!-- Audio Waveform Visualizer -->
+    <div class="visualizer-strip">
+      <div class="waveform-bars">
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
+        <div class="waveform-bar"></div>
       </div>
-      <div class="call-status-pill" id="agent-speech-status">Buyer is listening...</div>
+      <div class="agent-status-label" id="agent-speech-status">Buyer is listening...</div>
     </div>
 
-    <!-- Live Transcript -->
+    <!-- Dialogue Stream -->
     <div class="transcript-stream" id="transcript-stream"></div>
 
     <!-- Call Bottom Actions -->
@@ -652,58 +1394,99 @@
     </div>
   </section>
 
-  <!-- VIEW 3: POST-CALL LEVERAGE SCORECARD -->
+  <!-- =========================================================
+       VIEW 4: POST-CALL LEVERAGE SCORECARD
+       ========================================================= -->
   <section class="panel-view" id="view-scorecard">
-    <div class="scorecard-header">
-      <div>
-        <span style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Simulation Outcome</span>
-        <h2 id="scorecard-outcome" style="font-size:22px; font-weight:800; margin-top:2px;">Next Steps Secured</h2>
-        <p id="scorecard-summary" style="font-size:13px; color:var(--text-secondary); max-width:600px; margin-top:6px;"></p>
-      </div>
-      <div class="score-circle">
-        <div id="scorecard-score">84</div>
-        <span>/ 100</span>
-      </div>
-    </div>
-
-    <!-- Turning Points: Peak Gain vs Fatal Drop -->
-    <div class="turning-points-grid">
-      <div class="point-card peak">
-        <div class="point-tag">🟢 Peak Leverage Moment</div>
-        <div class="point-quote" id="peak-quote">"..."</div>
-        <div class="point-analysis" id="peak-analysis">You earned trust here.</div>
+    <div class="scorecard-wrapper">
+      <div class="scorecard-header">
+        <div>
+          <span style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Simulation Outcome</span>
+          <h2 id="scorecard-outcome" style="font-size:22px; font-weight:800; margin-top:2px;">Next Steps Secured</h2>
+          <p id="scorecard-summary" style="font-size:13.5px; color:var(--text-secondary); max-width:600px; margin-top:8px; line-height:1.5;"></p>
+        </div>
+        <div class="score-circle">
+          <div id="scorecard-score">84</div>
+          <span>/ 100</span>
+        </div>
       </div>
 
-      <div class="point-card fatal">
-        <div class="point-tag">🔴 Fatal Leverage Drop</div>
-        <div class="point-quote" id="fatal-quote">"..."</div>
-        <div class="point-analysis" id="fatal-analysis">Leverage collapsed here.</div>
-      </div>
-    </div>
-
-    <!-- 1-Click Rewind & Re-Pitch Sandbox -->
-    <div class="sandbox-card">
-      <h3><span>🔄</span> 1-Click "Rewind & Re-Pitch" Sandbox</h3>
-      <p style="font-size:13px; color:var(--text-secondary); margin-top:-4px;">Don't let a failed objection linger. Re-record your response to the exact objection where you lost leverage and test if your new phrasing saves the deal:</p>
-      
-      <div class="sandbox-prompt" id="sandbox-objection-prompt">"How does your pricing justify not building this in-house?"</div>
-
-      <div class="field">
-        <label for="sandbox-input">Your Revised Counter-Pitch</label>
-        <textarea id="sandbox-input" rows="3" placeholder="Isolate the objection, anchor on ROI, and ask a closing discovery question..."></textarea>
+      <!-- Turning Points -->
+      <div class="turning-points-grid">
+        <div class="point-card peak">
+          <div class="point-tag">🟢 Peak Leverage Moment</div>
+          <div class="point-quote" id="peak-quote">None detected.</div>
+          <div class="point-analysis" id="peak-analysis"></div>
+        </div>
+        <div class="point-card fatal">
+          <div class="point-tag">🔴 Fatal Leverage Drop</div>
+          <div class="point-quote" id="fatal-quote">None detected.</div>
+          <div class="point-analysis" id="fatal-analysis"></div>
+        </div>
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center;">
+      <!-- 1-Click Rewind & Re-Pitch Sandbox -->
+      <div class="sandbox-box">
+        <h3><span>🔁</span> 1-Click Rewind & Re-Pitch Sandbox</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-top:-6px;">Instead of reading generic feedback, re-record your answer to the fatal objection below and test how the buyer responds now.</p>
+        
+        <div class="sandbox-prompt-box" id="sandbox-objection-prompt">"Why can't my internal infrastructure team build this in two weeks?"</div>
+        
+        <textarea id="sandbox-input" rows="2" placeholder="Type your improved, metrics-driven counter-pitch here..." style="background:var(--bg-input); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--text-primary); font-family:inherit; font-size:13.5px; outline:none;"></textarea>
+        
         <button class="btn-primary" id="btn-sandbox-submit">Test New Response on AI Buyer &rarr;</button>
-        <button class="btn-ghost" id="btn-restart-sim">Start New Simulation</button>
+        <div id="sandbox-result" style="display:none; padding:14px; background:var(--bg-surface); border-radius:8px; font-size:13px; line-height:1.5;"></div>
       </div>
 
-      <div id="sandbox-result" style="display:none; margin-top:10px; padding:14px; background:#18181b; border:1px solid #27272a; border-radius:8px; font-size:13.5px; line-height:1.5;"></div>
+      <div style="display:flex; justify-content:center; gap:14px; margin-top:12px;">
+        <button class="btn-primary" id="btn-scorecard-restart" style="padding:12px 24px;">New Simulation &rarr;</button>
+        <button class="btn-ghost" id="btn-scorecard-dash">View Dashboard</button>
+      </div>
     </div>
   </section>
 </main>
 
+<!-- =========================================================
+     MODAL: AUTHENTICATION
+     ========================================================= -->
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal-card">
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" id="tab-login">Sign In</button>
+      <button class="auth-tab-btn" id="tab-register">Create Account</button>
+    </div>
+
+    <div class="auth-error" id="auth-error-msg"></div>
+
+    <form id="form-auth">
+      <div class="field" id="field-fullname" style="display:none; margin-bottom:14px;">
+        <label>Full Name</label>
+        <input type="text" id="input-fullname" placeholder="Hingu Krishn">
+      </div>
+      <div class="field" style="margin-bottom:14px;">
+        <label>Email Address</label>
+        <input type="email" id="input-email" required placeholder="closer@enterprise.com">
+      </div>
+      <div class="field" style="margin-bottom:20px;">
+        <label>Password</label>
+        <input type="password" id="input-password" required placeholder="••••••••" minlength="6">
+      </div>
+      <button type="submit" class="btn-primary" id="btn-auth-submit" style="width:100%; padding:12px; justify-content:center;">Sign In</button>
+    </form>
+
+    <div style="text-align:center; margin-top:16px;">
+      <button class="btn-ghost" id="btn-close-auth" style="border:none; font-size:12px;">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
+  // API Configuration
+  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || "";
+  let authToken = localStorage.getItem("verbalpause_token") || "";
+  let currentUser = null;
+
+  // Active Simulation State
   let activeSessionId = null;
   let activePersona = null;
   let timerInterval = null;
@@ -711,42 +1494,68 @@
   let isListening = false;
   let recognition = null;
   let synth = window.speechSynthesis;
+  let speechTimeout = null;
 
-  // API Configuration (Supports Vercel frontend calling Render backend)
-  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || "";
-  const navApiConfig = document.getElementById("nav-api-config");
-
-  if (navApiConfig) {
-    navApiConfig.addEventListener("click", () => {
-      const next = prompt(
-        "Enter Backend API URL (e.g. https://verbalpause.onrender.com):\nLeave empty for same-origin / relative /api:",
-        apiBase
-      );
-      if (next !== null) {
-        apiBase = next.trim().replace(/\/+$/, "");
-        if (apiBase) {
-          localStorage.setItem("verbalpause_api_url", apiBase);
-        } else {
-          localStorage.removeItem("verbalpause_api_url");
-        }
-        alert("Backend API configured: " + (apiBase || "Same-origin / relative"));
-        loadPresets();
-      }
-    });
-  }
-
-  // DOM Refs
+  // DOM Elements
+  const viewLanding = document.getElementById("view-landing");
+  const viewDashboard = document.getElementById("view-dashboard");
   const viewPersona = document.getElementById("view-persona");
   const viewCall = document.getElementById("view-call");
   const viewScorecard = document.getElementById("view-scorecard");
-  const navNewCall = document.getElementById("nav-new-call");
 
+  const navBrand = document.getElementById("nav-brand");
+  const navLinkFeatures = document.getElementById("nav-link-features");
+  const navLinkWhy = document.getElementById("nav-link-why");
+  const navLinkPricing = document.getElementById("nav-link-pricing");
+  const navLinkArena = document.getElementById("nav-link-arena");
+
+  const navApiConfig = document.getElementById("nav-api-config");
+  const authUnauthed = document.getElementById("auth-unauthed");
+  const authAuthed = document.getElementById("auth-authed");
+  const navStreakBadge = document.getElementById("nav-streak-badge");
+  const btnNavDashboard = document.getElementById("btn-nav-dashboard");
+  const btnNavLogout = document.getElementById("btn-nav-logout");
+
+  const btnOpenLogin = document.getElementById("btn-open-login");
+  const btnOpenRegister = document.getElementById("btn-open-register");
+  const btnHeroArena = document.getElementById("btn-hero-arena");
+  const btnHeroLogin = document.getElementById("btn-hero-login");
+  const btnPlayPreview = document.getElementById("btn-play-preview");
+
+  const modalAuth = document.getElementById("modal-auth");
+  const tabLogin = document.getElementById("tab-login");
+  const tabRegister = document.getElementById("tab-register");
+  const formAuth = document.getElementById("form-auth");
+  const fieldFullname = document.getElementById("field-fullname");
+  const inputFullname = document.getElementById("input-fullname");
+  const inputEmail = document.getElementById("input-email");
+  const inputPassword = document.getElementById("input-password");
+  const btnAuthSubmit = document.getElementById("btn-auth-submit");
+  const authErrorMsg = document.getElementById("auth-error-msg");
+  const btnCloseAuth = document.getElementById("btn-close-auth");
+  let authMode = "login"; // "login" | "register"
+
+  // Dashboard DOM
+  const dashGreeting = document.getElementById("dash-greeting");
+  const dashStreakSub = document.getElementById("dash-streak-sub");
+  const dashImprovementText = document.getElementById("dash-improvement-text");
+  const dashStatStreak = document.getElementById("dash-stat-streak");
+  const dashStatSessions = document.getElementById("dash-stat-sessions");
+  const dashStatAvgScore = document.getElementById("dash-stat-avg-score");
+  const dashStatWinRate = document.getElementById("dash-stat-win-rate");
+  const dashSessionsCount = document.getElementById("dash-sessions-count");
+  const dashSessionsTbody = document.getElementById("dash-sessions-tbody");
+  const btnDashStartArena = document.getElementById("btn-dash-start-arena");
+  const btnBackToDash = document.getElementById("btn-back-to-dash");
+
+  // Arena DOM
   const presetsContainer = document.getElementById("presets-container");
   const customCompany = document.getElementById("custom-company");
   const customRole = document.getElementById("custom-role");
   const customContext = document.getElementById("custom-context");
   const btnGeneratePersona = document.getElementById("btn-generate-persona");
 
+  // Call DOM
   const callAvatar = document.getElementById("call-avatar");
   const callName = document.getElementById("call-name");
   const callRole = document.getElementById("call-role");
@@ -769,6 +1578,7 @@
   const textSpeechInput = document.getElementById("text-speech-input");
   const btnSendTurn = document.getElementById("btn-send-turn");
 
+  // Scorecard DOM
   const scorecardScore = document.getElementById("scorecard-score");
   const scorecardOutcome = document.getElementById("scorecard-outcome");
   const scorecardSummary = document.getElementById("scorecard-summary");
@@ -780,25 +1590,115 @@
   const sandboxInput = document.getElementById("sandbox-input");
   const btnSandboxSubmit = document.getElementById("btn-sandbox-submit");
   const sandboxResult = document.getElementById("sandbox-result");
-  const btnRestartSim = document.getElementById("btn-restart-sim");
+  const btnScorecardRestart = document.getElementById("btn-scorecard-restart");
+  const btnScorecardDash = document.getElementById("btn-scorecard-dash");
 
-  // Web Speech Setup
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (SpeechRec) {
-    recognition = new SpeechRec();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = "en-US";
+  // Navigation Controller
+  function showView(view) {
+    viewLanding.style.display = view === "landing" ? "flex" : "none";
+    viewDashboard.style.display = view === "dashboard" ? "flex" : "none";
+    viewPersona.style.display = view === "persona" ? "flex" : "none";
+    viewCall.style.display = view === "call" ? "flex" : "none";
+    viewScorecard.style.display = view === "scorecard" ? "flex" : "none";
 
-    recognition.onresult = (e) => {
-      const transcript = e.results[e.results.length - 1][0].transcript.trim();
-      if (transcript) {
-        sendTurn(transcript);
+    if (view === "persona") {
+      document.querySelectorAll(".persona-card").forEach(c => c.classList.remove("selected"));
+      activeSessionId = null;
+      activePersona = null;
+    }
+
+    if (view === "dashboard" && authToken) {
+      loadDashboard();
+    }
+  }
+
+  // Auth Header Helper
+  function getAuthHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+    return headers;
+  }
+
+  // Check Current User Auth on Startup
+  async function checkAuth() {
+    if (!authToken) {
+      updateAuthUI(null);
+      return;
+    }
+    try {
+      const res = await fetch(`${apiBase}/api/auth/me`, {
+        headers: getAuthHeaders()
+      });
+      if (res.ok) {
+        currentUser = await res.json();
+        updateAuthUI(currentUser);
+      } else {
+        localStorage.removeItem("verbalpause_token");
+        authToken = "";
+        updateAuthUI(null);
       }
-    };
-    recognition.onerror = () => {
-      stopMic();
-    };
+    } catch (_) {
+      updateAuthUI(null);
+    }
+  }
+
+  function updateAuthUI(user) {
+    if (user) {
+      authUnauthed.style.display = "none";
+      authAuthed.style.display = "flex";
+      navStreakBadge.textContent = `🔥 ${user.current_streak}-Day Streak`;
+      btnBackToDash.style.display = "inline-flex";
+    } else {
+      authUnauthed.style.display = "flex";
+      authAuthed.style.display = "none";
+      btnBackToDash.style.display = "none";
+    }
+  }
+
+  // Load Dashboard Data
+  async function loadDashboard() {
+    if (!authToken) return;
+    try {
+      // 1. Stats
+      const sRes = await fetch(`${apiBase}/api/dashboard/stats`, { headers: getAuthHeaders() });
+      if (sRes.ok) {
+        const stats = await sRes.json();
+        dashGreeting.textContent = `Welcome back, ${stats.user_name}`;
+        dashStreakSub.textContent = stats.streak_status;
+        dashStatStreak.textContent = `${stats.current_streak} Days 🔥`;
+        dashStatSessions.textContent = stats.total_sessions;
+        dashStatAvgScore.textContent = `${Math.round(stats.average_score)} / 100`;
+        dashStatWinRate.textContent = `${stats.win_rate_pct}%`;
+        dashImprovementText.textContent = stats.top_improvement_area;
+      }
+
+      // 2. Recent Sessions
+      const listRes = await fetch(`${apiBase}/api/dashboard/sessions`, { headers: getAuthHeaders() });
+      if (listRes.ok) {
+        const sessions = await listRes.json();
+        dashSessionsCount.textContent = `${sessions.length} sessions recorded`;
+        if (sessions.length === 0) {
+          dashSessionsTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:32px;">No sessions completed yet. Jump into the arena to record your first call!</td></tr>`;
+        } else {
+          dashSessionsTbody.innerHTML = sessions.map(s => {
+            const dateStr = new Date(s.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const scoreClass = s.overall_score >= 70 ? 'score-high' : (s.overall_score >= 45 ? 'score-mid' : 'score-low');
+            return `
+              <tr>
+                <td><strong>${escapeHtml(s.persona_name)}</strong><br><span style="font-size:11px; color:var(--text-muted);">${escapeHtml(s.persona_role)} @ ${escapeHtml(s.persona_company)}</span></td>
+                <td><span style="font-size:12px; font-weight:600;">${escapeHtml(s.outcome_label)}</span></td>
+                <td><div class="score-badge ${scoreClass}">${s.overall_score}</div></td>
+                <td>${s.questions_asked}</td>
+                <td>${Math.round(s.duration_seconds)}s</td>
+                <td style="color:var(--text-muted); font-size:12px;">${dateStr}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to load dashboard:", err);
+    }
   }
 
   // Load Presets
@@ -850,7 +1750,7 @@
     try {
       const res = await fetch(`${apiBase}/api/personas/generate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           company_name_or_url: comp,
           prospect_role: role,
@@ -873,7 +1773,7 @@
     try {
       const res = await fetch(`${apiBase}/api/sessions/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           persona_id: presetId,
           custom_persona: customPersona
@@ -913,7 +1813,7 @@
     try {
       const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/turn`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ transcript: text })
       });
       if (!res.ok) throw new Error("Turn failed.");
@@ -965,8 +1865,6 @@
   }
 
   // TTS Output
-  let speechTimeout = null;
-
   function speakText(text) {
     if (speechTimeout) {
       clearTimeout(speechTimeout);
@@ -1020,9 +1918,8 @@
     }, 1000);
   }
 
-  // End Call & Grade
+  // End Call & Grading
   btnEndCall.addEventListener("click", async () => {
-    if (!activeSessionId) return;
     clearInterval(timerInterval);
     if (synth) synth.cancel();
     stopMic();
@@ -1031,7 +1928,10 @@
     btnEndCall.textContent = "Analyzing Call...";
 
     try {
-      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/end`, { method: "POST" });
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/end`, {
+        method: "POST",
+        headers: getAuthHeaders()
+      });
       const scorecard = await res.json();
 
       showView("scorecard");
@@ -1067,7 +1967,7 @@
     try {
       const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/retry-turn`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           objection_prompt: sandboxObjectionPrompt.textContent.replace(/"/g, ''),
           candidate_new_response: text
@@ -1083,37 +1983,51 @@
     }
   });
 
-  // Mic toggles
+  // Speech Recognition (Mic)
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRec) {
+    recognition = new SpeechRec();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      isListening = true;
+      btnMic.classList.add("recording");
+    };
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      textSpeechInput.value = transcript;
+      sendTurn(transcript);
+    };
+    recognition.onerror = () => stopMic();
+    recognition.onend = () => stopMic();
+  }
+
+  function startMic() {
+    if (!recognition) {
+      alert("Speech recognition not supported in this browser. Please type your response.");
+      return;
+    }
+    try { recognition.start(); } catch (_) {}
+  }
+
+  function stopMic() {
+    isListening = false;
+    btnMic.classList.remove("recording");
+    try { if (recognition) recognition.stop(); } catch (_) {}
+  }
+
   btnMic.addEventListener("click", () => {
     if (isListening) stopMic();
     else startMic();
   });
 
-  function startMic() {
-    if (!recognition) {
-      alert("Speech recognition is not supported in this browser. Please type your response.");
-      return;
-    }
-    try {
-      recognition.start();
-      isListening = true;
-      btnMic.classList.add("listening");
-    } catch (_) {}
-  }
-
-  function stopMic() {
-    if (!recognition) return;
-    try {
-      recognition.stop();
-      isListening = false;
-      btnMic.classList.remove("listening");
-    } catch (_) {}
-  }
-
   btnSendTurn.addEventListener("click", () => {
     const text = textSpeechInput.value.trim();
     if (text) sendTurn(text);
   });
+
   textSpeechInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const text = textSpeechInput.value.trim();
@@ -1121,38 +2035,150 @@
     }
   });
 
-  // Navigation
-  function showView(view) {
-    viewPersona.style.display = view === "persona" ? "flex" : "none";
-    viewCall.style.display = view === "call" ? "flex" : "none";
-    viewScorecard.style.display = view === "scorecard" ? "flex" : "none";
-    navNewCall.style.display = view === "persona" ? "none" : "block";
-
-    if (view === "persona") {
-      // Clear persistent selection border so no card remains stuck selected after leaving a session
-      document.querySelectorAll(".persona-card").forEach(c => c.classList.remove("selected"));
-      activeSessionId = null;
-      activePersona = null;
+  // Modal Auth Logic
+  function openAuth(mode = "login") {
+    authMode = mode;
+    modalAuth.style.display = "flex";
+    authErrorMsg.style.display = "none";
+    if (mode === "login") {
+      tabLogin.classList.add("active");
+      tabRegister.classList.remove("active");
+      fieldFullname.style.display = "none";
+      btnAuthSubmit.textContent = "Sign In";
+    } else {
+      tabRegister.classList.add("active");
+      tabLogin.classList.remove("active");
+      fieldFullname.style.display = "flex";
+      btnAuthSubmit.textContent = "Create Account";
     }
   }
 
-  navNewCall.addEventListener("click", () => {
-    if (confirm("Abandon active simulation?")) {
-      clearInterval(timerInterval);
-      if (synth) synth.cancel();
-      stopMic();
-      showView("persona");
+  function closeAuth() {
+    modalAuth.style.display = "none";
+  }
+
+  tabLogin.addEventListener("click", () => openAuth("login"));
+  tabRegister.addEventListener("click", () => openAuth("register"));
+  btnOpenLogin.addEventListener("click", () => openAuth("login"));
+  btnOpenRegister.addEventListener("click", () => openAuth("register"));
+  btnHeroLogin.addEventListener("click", () => openAuth("register"));
+  btnCloseAuth.addEventListener("click", closeAuth);
+
+  formAuth.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    authErrorMsg.style.display = "none";
+    btnAuthSubmit.disabled = true;
+
+    const email = inputEmail.value.trim();
+    const password = inputPassword.value;
+    const fullName = inputFullname.value.trim();
+
+    const endpoint = authMode === "login" ? "/api/auth/login" : "/api/auth/register";
+    const body = authMode === "login"
+      ? { email, password }
+      : { email, password, full_name: fullName || "Closer" };
+
+    try {
+      const res = await fetch(`${apiBase}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || "Authentication failed.");
+      }
+
+      authToken = data.token;
+      currentUser = data.user;
+      localStorage.setItem("verbalpause_token", authToken);
+
+      closeAuth();
+      updateAuthUI(currentUser);
+      showView("dashboard");
+    } catch (err) {
+      authErrorMsg.textContent = err.message;
+      authErrorMsg.style.display = "block";
+    } finally {
+      btnAuthSubmit.disabled = false;
     }
   });
-  btnRestartSim.addEventListener("click", () => showView("persona"));
+
+  btnNavLogout.addEventListener("click", () => {
+    authToken = "";
+    currentUser = null;
+    localStorage.removeItem("verbalpause_token");
+    updateAuthUI(null);
+    showView("landing");
+  });
+
+  // Navigation Links & Triggers
+  navBrand.addEventListener("click", () => {
+    if (authToken) showView("dashboard");
+    else showView("landing");
+  });
+  navLinkFeatures.addEventListener("click", () => {
+    showView("landing");
+    document.getElementById("section-comparison").scrollIntoView({ behavior: "smooth" });
+  });
+  navLinkWhy.addEventListener("click", () => {
+    showView("landing");
+    document.getElementById("section-comparison").scrollIntoView({ behavior: "smooth" });
+  });
+  navLinkPricing.addEventListener("click", () => {
+    showView("landing");
+    document.getElementById("section-pricing").scrollIntoView({ behavior: "smooth" });
+  });
+  navLinkArena.addEventListener("click", () => showView("persona"));
+  btnHeroArena.addEventListener("click", () => showView("persona"));
+  btnTierFree.addEventListener("click", () => showView("persona"));
+  btnTierPro.addEventListener("click", () => {
+    if (authToken) showView("persona");
+    else openAuth("register");
+  });
+  btnTierTeam.addEventListener("click", () => {
+    alert("Enterprise Dealmaker inquiries: email founders@verbalpause.com");
+  });
+
+  btnNavDashboard.addEventListener("click", () => showView("dashboard"));
+  btnDashStartArena.addEventListener("click", () => showView("persona"));
+  btnBackToDash.addEventListener("click", () => showView("dashboard"));
+  btnScorecardRestart.addEventListener("click", () => showView("persona"));
+  btnScorecardDash.addEventListener("click", () => {
+    if (authToken) showView("dashboard");
+    else showView("landing");
+  });
+
+  // Audio Demo Preview
+  btnPlayPreview.addEventListener("click", () => {
+    const previewText = "Sorry to cut in, but I have a hard stop in 3 minutes. What is the actual bottom-line ROI here?";
+    speakText(previewText);
+  });
+
+  // API Config
+  navApiConfig.addEventListener("click", () => {
+    const next = prompt(
+      "Enter Backend API URL (e.g. https://verbalpause-backend.onrender.com):\nLeave empty for same-origin / relative /api:",
+      apiBase
+    );
+    if (next !== null) {
+      apiBase = next.trim().replace(/\/+$/, "");
+      if (apiBase) localStorage.setItem("verbalpause_api_url", apiBase);
+      else localStorage.removeItem("verbalpause_api_url");
+      alert("Backend API configured: " + (apiBase || "Same-origin / relative"));
+      loadPresets();
+    }
+  });
 
   function escapeHtml(str) {
+    if (!str) return "";
     const d = document.createElement("div");
     d.textContent = str;
     return d.innerHTML;
   }
 
-  // Init
+  // Startup Init
+  checkAuth();
   loadPresets();
 </script>
 </body>

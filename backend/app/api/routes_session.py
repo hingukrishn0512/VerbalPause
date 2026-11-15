@@ -1,13 +1,21 @@
 import uuid
 import time
-from fastapi import APIRouter, HTTPException
+import json
+import logging
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
+from sqlalchemy.orm import Session
+
 from backend.app.core.persona_generator import BuyerPersona, PRESET_PERSONAS
 from backend.app.core.state_machine import NegotiationStateMachine
 from backend.app.core.voice_agent import VoiceAgentRunner
 from backend.app.core.leverage_analyzer import LeverageAnalyzer, CallScorecard
+from backend.app.core.auth import get_optional_user
+from backend.app.db.database import get_db
+from backend.app.db.models import User, CallSessionRecord
 
+logger = logging.getLogger("verbalpause.session")
 router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 leverage_analyzer = LeverageAnalyzer()
 
@@ -31,7 +39,10 @@ class RetryTurnRequest(BaseModel):
 
 
 @router.post("/start")
-def start_simulation(payload: StartSessionRequest):
+def start_simulation(
+    payload: StartSessionRequest,
+    optional_user: Optional[User] = Depends(get_optional_user)
+):
     """Initializes a new adversarial voice roleplay session with a chosen persona."""
     persona = None
     if payload.custom_persona:
@@ -48,6 +59,7 @@ def start_simulation(payload: StartSessionRequest):
 
     ACTIVE_SESSIONS[session_id] = {
         "session_id": session_id,
+        "user_id": optional_user.id if optional_user else None,
         "persona": persona,
         "state_machine": state_machine,
         "agent_runner": agent_runner,
@@ -120,11 +132,18 @@ async def process_turn(session_id: str, payload: UserTurnRequest):
 
 
 @router.post("/{session_id}/end", response_model=CallScorecard)
-async def end_simulation(session_id: str):
-    """Ends the roleplay call and generates the post-call Leverage Waveform & Scorecard."""
+async def end_simulation(
+    session_id: str,
+    db: Session = Depends(get_db),
+    optional_user: Optional[User] = Depends(get_optional_user)
+):
+    """Ends the roleplay call, generates the post-call Scorecard, and persists to user history."""
     session = ACTIVE_SESSIONS.get(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found.")
+
+    if session.get("scorecard"):
+        return session["scorecard"]
 
     session["is_ended"] = True
     sm: NegotiationStateMachine = session["state_machine"]
@@ -140,6 +159,36 @@ async def end_simulation(session_id: str):
     )
 
     session["scorecard"] = scorecard
+
+    # Persist call session record to DB if user is authenticated
+    user_id = session.get("user_id") or (optional_user.id if optional_user else None)
+    try:
+        call_record = CallSessionRecord(
+            id=session_id,
+            user_id=user_id,
+            persona_id=getattr(persona, "id", "custom"),
+            persona_name=persona.name,
+            persona_role=persona.role,
+            persona_company=persona.company,
+            difficulty_level=getattr(persona, "difficulty_level", "Hard"),
+            overall_score=scorecard.overall_score,
+            outcome_label=scorecard.outcome_label,
+            talk_ratio_user_pct=scorecard.talk_ratio_user_pct,
+            talk_ratio_buyer_pct=scorecard.talk_ratio_buyer_pct,
+            questions_asked=scorecard.questions_asked,
+            interruptions_count=scorecard.interruptions_count,
+            buzzwords_json=json.dumps(scorecard.buzzwords_used),
+            coaching_summary=scorecard.coaching_summary,
+            re_pitch_prompt=scorecard.re_pitch_sandbox_prompt,
+            peak_moment_json=json.dumps(scorecard.peak_moment.model_dump()) if scorecard.peak_moment else "",
+            fatal_moment_json=json.dumps(scorecard.fatal_drop_moment.model_dump()) if scorecard.fatal_drop_moment else "",
+            duration_seconds=round(time.time() - session["created_at"], 1)
+        )
+        db.add(call_record)
+        db.commit()
+    except Exception as e:
+        logger.warning(f"Failed to persist CallSessionRecord: {e}")
+
     return scorecard
 
 

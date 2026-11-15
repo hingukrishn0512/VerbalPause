@@ -4,8 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from backend.app.config import settings
+from backend.app.db.database import init_db
 from backend.app.api.routes_persona import router as persona_router
 from backend.app.api.routes_session import router as session_router
+from backend.app.api.routes_auth import router as auth_router
+from backend.app.api.routes_dashboard import router as dashboard_router
+
+# Initialize database schema
+init_db()
 
 app = FastAPI(
     title=settings.app_name,
@@ -23,6 +29,8 @@ app.add_middleware(
 )
 
 # Include Routers
+app.include_router(auth_router)
+app.include_router(dashboard_router)
 app.include_router(persona_router)
 app.include_router(session_router)
 
