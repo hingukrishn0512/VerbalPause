@@ -13,9 +13,9 @@ class Settings(BaseSettings):
     cartesia_api_key: str = os.getenv("CARTESIA_API_KEY", "")
     elevenlabs_api_key: str = os.getenv("ELEVENLABS_API_KEY", "")
 
-    # LLM Settings
-    default_model: str = "llama-3.3-70b-versatile"
-    fast_model: str = "llama-3.1-8b-instant"
+    # LLM Settings (Configured for available Groq models)
+    default_model: str = "openai/gpt-oss-120b"
+    fast_model: str = "openai/gpt-oss-20b"
 
     # Emotion & Interruption Thresholds
     initial_patience: float = 100.0

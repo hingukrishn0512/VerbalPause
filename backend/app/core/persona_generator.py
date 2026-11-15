@@ -1,5 +1,7 @@
 import json
 import logging
+import re
+import time
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 from langchain_groq import ChatGroq
@@ -166,7 +168,8 @@ Return a valid JSON object with EXACTLY the following structure (no markdown fen
             raw_text = raw_text.split("```")[1].split("```")[0].strip()
 
         data = json.loads(raw_text)
-        persona_id = f"custom_{int(data.get('name', 'prospect').lower().replace(' ', '_'))}" if data.get('name') else "custom_prospect"
+        slug = re.sub(r'[^a-z0-9_]', '', data.get('name', 'prospect').lower().replace(' ', '_'))
+        persona_id = f"custom_{slug}_{int(time.time())}" if slug else f"custom_prospect_{int(time.time())}"
 
         return BuyerPersona(
             id=persona_id,
