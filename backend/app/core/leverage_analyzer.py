@@ -56,6 +56,58 @@ class LeverageAnalyzer:
         state_summary: Dict[str, Any]
     ) -> CallScorecard:
         """Evaluates the full dialogue and outputs turning points, leverage curve, and re-pitch coaching."""
+        user_turns = [t for t in conversation_turns if t.get("role") == "user" and t.get("content", "").strip()]
+        opening_prompt = conversation_turns[0].get("content") if conversation_turns else "What is this regarding?"
+
+        # Edge Case 1: Empty call (user started session and immediately clicked End Call without answering)
+        if not user_turns:
+            return CallScorecard(
+                overall_score=0,
+                outcome_label="Call Aborted (No Response Provided)",
+                talk_ratio_user_pct=0.0,
+                talk_ratio_buyer_pct=100.0,
+                questions_asked=0,
+                buzzwords_used=[],
+                interruptions_count=0,
+                peak_moment=None,
+                fatal_drop_moment=None,
+                turning_points=[],
+                coaching_summary="The session was ended immediately without any verbal response from the candidate. Speak into your microphone or submit a pitch in the input bar to practice handling buyer objections and earn a negotiation score.",
+                re_pitch_sandbox_prompt=opening_prompt
+            )
+
+        # Edge Case 2: Incomplete drop-off (user spoke once with only a name or 1-5 words and ended call)
+        user_total_words = sum(len(t.get("content", "").split()) for t in user_turns)
+        if len(user_turns) == 1 and user_total_words <= 6:
+            single_quote = user_turns[0].get("content", "")
+            drop_moment = TurningPoint(
+                timestamp_sec=float(user_turns[0].get("timestamp_sec", 2.0)),
+                point_type="fatal_drop",
+                speaker="user",
+                quote=single_quote,
+                leverage_score=-2.5,
+                analysis="The candidate introduced themselves but disconnected before delivering a value proposition or answering the buyer's 3-minute constraint.",
+                suggested_re_pitch=f"Thanks for taking my call, {persona_name}. I know you have a hard stop in 3 minutes—I'm reaching out because teams like yours are dealing with unexpected downtime. Do you have 60 seconds to see how we solve that?"
+            )
+            return CallScorecard(
+                overall_score=15,
+                outcome_label="Call Dropped (Incomplete Introduction)",
+                talk_ratio_user_pct=10.0,
+                talk_ratio_buyer_pct=90.0,
+                questions_asked=0,
+                buzzwords_used=[],
+                interruptions_count=0,
+                peak_moment=None,
+                fatal_drop_moment=drop_moment,
+                turning_points=[drop_moment],
+                coaching_summary="The call was disconnected after an initial introduction before pitching any value. In enterprise negotiations, the opening 20 seconds must immediately justify why the buyer should stay on the line.",
+                re_pitch_sandbox_prompt=opening_prompt
+            )
+
+        # Active call analysis
+        calculated_score = state_summary.get("overall_score", 50)
+        calculated_outcome = state_summary.get("outcome", "Practice Completed")
+
         formatted_dialogue = "\n".join(
             f"[{t.get('role', 'Speaker').upper()}]: {t.get('content', '')}"
             for t in conversation_turns
@@ -68,14 +120,16 @@ Roleplay Dialogue Transcript:
 {formatted_dialogue}
 
 Telemetry Summary:
+- Ground-Truth Calculated Score: {calculated_score} / 100
+- Outcome Category: {calculated_outcome}
 - Interruptions Triggered: {state_summary.get('interruptions_triggered', 0)}
 - Buzzwords Detected: {state_summary.get('buzzwords_used', [])}
 - Questions Asked by User: {state_summary.get('questions_asked', 0)}
 
 Analyze the conversation and return a valid JSON object (pure JSON, no markdown) with the following structure:
 {{
-  "overall_score": 74,
-  "outcome_label": "High Conviction Next Steps / Stalled in Committee / Lost Deal",
+  "overall_score": {calculated_score},
+  "outcome_label": "{calculated_outcome}",
   "coaching_summary": "3-sentence executive diagnosis of candidate's negotiation strengths and fatal blunders.",
   "turning_points": [
     {{
@@ -142,9 +196,15 @@ Analyze the conversation and return a valid JSON object (pure JSON, no markdown)
         except Exception:
             user_pct = 50.0
 
+        final_score = calculated_score
+        if "overall_score" in data and isinstance(data["overall_score"], (int, float)):
+            llm_val = int(data["overall_score"])
+            if abs(llm_val - calculated_score) <= 4:
+                final_score = llm_val
+
         return CallScorecard(
-            overall_score=data.get("overall_score", state_summary.get("overall_score", 70)),
-            outcome_label=data.get("outcome_label", state_summary.get("outcome", "Completed")),
+            overall_score=final_score,
+            outcome_label=calculated_outcome,
             talk_ratio_user_pct=user_pct,
             talk_ratio_buyer_pct=round(100.0 - user_pct, 1),
             questions_asked=state_summary.get("questions_asked", 0),

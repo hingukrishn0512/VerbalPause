@@ -167,22 +167,88 @@ class NegotiationStateMachine:
 
     def get_summary(self) -> Dict[str, Any]:
         """Calculates post-call behavioral metrics and leverage breakdown."""
+        # 1. Edge Case: User never spoke or aborted immediately
+        if self.user_turn_count == 0:
+            return {
+                "overall_score": 0,
+                "outcome": "Call Aborted (No Response Provided)",
+                "final_leverage": round(self.deal_leverage, 1),
+                "final_patience": round(self.patience, 1),
+                "final_skepticism": round(self.skepticism, 1),
+                "talk_to_listen_ratio": "0.0% User / 100.0% Buyer",
+                "ideal_talk_ratio": "45% User / 55% Buyer",
+                "questions_asked": 0,
+                "buzzwords_used": [],
+                "interruptions_triggered": 0,
+                "user_turn_count": 0,
+                "timeline": [dp.model_dump() for dp in self.timeline],
+            }
+
         total_time = self.total_user_talk_sec + self.total_buyer_talk_sec
         talk_ratio = round((self.total_user_talk_sec / total_time * 100), 1) if total_time > 0 else 50.0
 
-        # Calculate final deal outcome based on leverage and skepticism
-        if self.deal_leverage >= 4.0 and self.skepticism < 45.0:
-            outcome = "Next Steps Secured (High Conviction)"
-            score = 88 + min(12, int(self.deal_leverage))
-        elif self.deal_leverage >= 0.0 and self.patience > 40.0:
-            outcome = "Mild Interest (Needs Value Proof)"
-            score = 68 + int(self.deal_leverage * 3)
-        elif self.patience <= 30.0 or self.deal_leverage < -4.0:
-            outcome = "Lost Deal (Buyer Impatience / Fluff Overload)"
-            score = max(25, 50 + int(self.deal_leverage * 4))
+        # 2. Edge Case: Single brief turn (dropped call before value pitch)
+        if self.user_turn_count == 1 and self.total_user_talk_sec <= 6.0:
+            return {
+                "overall_score": 15,
+                "outcome": "Call Dropped (Incomplete Introduction)",
+                "final_leverage": round(self.deal_leverage, 1),
+                "final_patience": round(self.patience, 1),
+                "final_skepticism": round(self.skepticism, 1),
+                "talk_to_listen_ratio": f"{talk_ratio}% User / {round(100 - talk_ratio, 1)}% Buyer",
+                "ideal_talk_ratio": "45% User / 55% Buyer",
+                "questions_asked": self.questions_asked_by_user,
+                "buzzwords_used": list(set(self.buzzwords_used)),
+                "interruptions_triggered": self.interruptions_triggered,
+                "user_turn_count": 1,
+                "timeline": [dp.model_dump() for dp in self.timeline],
+            }
+
+        # 3. Multi-dimensional objective scoring
+        # Component A: Deal leverage (-10 to +10 mapped to 0-40 pts)
+        leverage_comp = max(0.0, min(40.0, ((self.deal_leverage + 10.0) / 20.0) * 40.0))
+
+        # Component B: Buyer patience preservation (0-25 pts)
+        patience_comp = max(0.0, min(25.0, (self.patience / 100.0) * 25.0))
+
+        # Component C: Buyer skepticism reduction (0-15 pts)
+        skepticism_comp = max(0.0, min(15.0, ((100.0 - self.skepticism) / 100.0) * 15.0))
+
+        # Component D: Discovery & questions asked (0-10 pts)
+        question_comp = min(10.0, self.questions_asked_by_user * 3.5)
+
+        # Component E: Talk-to-listen balance (0-10 pts)
+        if 35.0 <= talk_ratio <= 55.0:
+            ratio_comp = 10.0
+        elif 20.0 <= talk_ratio <= 70.0:
+            ratio_comp = 6.0
         else:
-            outcome = "Stalled in Committee (Pricing / Skepticism Friction)"
-            score = 60 + int(self.deal_leverage * 2)
+            ratio_comp = 3.0
+
+        # Penalties: Interruptions (-8 ea) and Buzzwords (-3 ea)
+        interruption_penalty = self.interruptions_triggered * 8.0
+        buzzword_penalty = len(self.buzzwords_used) * 3.0
+
+        raw_score = (
+            leverage_comp +
+            patience_comp +
+            skepticism_comp +
+            question_comp +
+            ratio_comp -
+            interruption_penalty -
+            buzzword_penalty
+        )
+        score = max(10, min(96, int(round(raw_score))))
+
+        # Determine qualitative outcome
+        if score >= 82 and self.deal_leverage >= 3.0:
+            outcome = "Next Steps Secured (High Conviction Demo Booked)"
+        elif score >= 65 and self.deal_leverage >= 0.0:
+            outcome = "Mild Buyer Interest (Follow-Up POC Requested)"
+        elif score >= 45:
+            outcome = "Stalled in Committee (High Skepticism / Value Unclear)"
+        else:
+            outcome = "Lost Deal (Buyer Impatience / Fluff Disqualification)"
 
         return {
             "overall_score": score,
@@ -195,5 +261,6 @@ class NegotiationStateMachine:
             "questions_asked": self.questions_asked_by_user,
             "buzzwords_used": list(set(self.buzzwords_used)),
             "interruptions_triggered": self.interruptions_triggered,
+            "user_turn_count": self.user_turn_count,
             "timeline": [dp.model_dump() for dp in self.timeline],
         }
