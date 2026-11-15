@@ -783,9 +783,9 @@
       const res = await fetch("/api/personas/presets");
       const presets = await res.json();
       presetsContainer.innerHTML = "";
-      presets.forEach((p, idx) => {
+      presets.forEach((p) => {
         const card = document.createElement("div");
-        card.className = "persona-card" + (idx === 0 ? " selected" : "");
+        card.className = "persona-card";
         const badgeClass = p.difficulty_level === "Brutal" ? "badge-brutal" : (p.difficulty_level === "Hard" ? "badge-hard" : "badge-realistic");
         card.innerHTML = `
           <div class="difficulty-badge ${badgeClass}">${p.difficulty_level}</div>
@@ -1095,6 +1095,13 @@
     viewCall.style.display = view === "call" ? "flex" : "none";
     viewScorecard.style.display = view === "scorecard" ? "flex" : "none";
     navNewCall.style.display = view === "persona" ? "none" : "block";
+
+    if (view === "persona") {
+      // Clear persistent selection border so no card remains stuck selected after leaving a session
+      document.querySelectorAll(".persona-card").forEach(c => c.classList.remove("selected"));
+      activeSessionId = null;
+      activePersona = null;
+    }
   }
 
   navNewCall.addEventListener("click", () => {
