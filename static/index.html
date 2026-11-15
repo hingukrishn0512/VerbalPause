@@ -535,6 +535,7 @@
     <span>VerbalPause</span>
   </div>
   <div class="header-actions">
+    <button class="btn-ghost" id="nav-api-config" title="Configure Backend API URL">⚙️ API URL</button>
     <button class="btn-ghost" id="nav-new-call" style="display:none;">New Simulation</button>
   </div>
 </header>
@@ -711,6 +712,29 @@
   let recognition = null;
   let synth = window.speechSynthesis;
 
+  // API Configuration (Supports Vercel frontend calling Render backend)
+  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || "";
+  const navApiConfig = document.getElementById("nav-api-config");
+
+  if (navApiConfig) {
+    navApiConfig.addEventListener("click", () => {
+      const next = prompt(
+        "Enter Backend API URL (e.g. https://verbalpause.onrender.com):\nLeave empty for same-origin / relative /api:",
+        apiBase
+      );
+      if (next !== null) {
+        apiBase = next.trim().replace(/\/+$/, "");
+        if (apiBase) {
+          localStorage.setItem("verbalpause_api_url", apiBase);
+        } else {
+          localStorage.removeItem("verbalpause_api_url");
+        }
+        alert("Backend API configured: " + (apiBase || "Same-origin / relative"));
+        loadPresets();
+      }
+    });
+  }
+
   // DOM Refs
   const viewPersona = document.getElementById("view-persona");
   const viewCall = document.getElementById("view-call");
@@ -780,7 +804,7 @@
   // Load Presets
   async function loadPresets() {
     try {
-      const res = await fetch("/api/personas/presets");
+      const res = await fetch(`${apiBase}/api/personas/presets`);
       const presets = await res.json();
       presetsContainer.innerHTML = "";
       presets.forEach((p) => {
@@ -824,7 +848,7 @@
     btnGeneratePersona.textContent = "Researching Company & Synthesizing Persona...";
 
     try {
-      const res = await fetch("/api/personas/generate", {
+      const res = await fetch(`${apiBase}/api/personas/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -847,7 +871,7 @@
   // Start Session
   async function startSession(presetId, customPersona = null) {
     try {
-      const res = await fetch("/api/sessions/start", {
+      const res = await fetch(`${apiBase}/api/sessions/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -878,6 +902,8 @@
   // Turn Execution
   async function sendTurn(text) {
     if (!activeSessionId || !text) return;
+    btnSendTurn.disabled = true;
+    btnMic.disabled = true;
     textSpeechInput.value = "";
     addTranscriptBubble("user", text);
 
@@ -885,7 +911,7 @@
     interruptionBanner.style.display = "none";
 
     try {
-      const res = await fetch(`/api/sessions/${activeSessionId}/turn`, {
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/turn`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ transcript: text })
@@ -901,6 +927,9 @@
       if (data.is_interruption) {
         interruptionBanner.style.display = "flex";
         interruptionText.textContent = `⚠️ The buyer cut you off: "${reply}"`;
+      } else if (data.patience <= 0.0) {
+        interruptionBanner.style.display = "flex";
+        interruptionText.textContent = `🛑 The buyer lost all patience and ended the call.`;
       }
 
       addTranscriptBubble("buyer", reply, data.is_interruption);
@@ -908,6 +937,9 @@
     } catch (err) {
       agentSpeechStatus.textContent = "Error processing turn. Try again.";
       waveformBars.forEach(b => b.classList.remove("active"));
+    } finally {
+      btnSendTurn.disabled = false;
+      btnMic.disabled = false;
     }
   }
 
@@ -999,7 +1031,7 @@
     btnEndCall.textContent = "Analyzing Call...";
 
     try {
-      const res = await fetch(`/api/sessions/${activeSessionId}/end`, { method: "POST" });
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/end`, { method: "POST" });
       const scorecard = await res.json();
 
       showView("scorecard");
@@ -1033,7 +1065,7 @@
     btnSandboxSubmit.textContent = "Testing Response on Buyer...";
 
     try {
-      const res = await fetch(`/api/sessions/${activeSessionId}/retry-turn`, {
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/retry-turn`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -82,6 +82,10 @@ class VoiceAgentRunner:
 
         self.messages.append(AIMessage(content=buyer_text))
 
+        # Sliding window pruning: keep system prompt + last 10 turns to avoid latency drift on long calls
+        if len(self.messages) > 11:
+            self.messages = [self.messages[0]] + self.messages[-10:]
+
         # Check leverage impact of the turn
         leverage_shift = 0.5 if "?" in user_transcript else -0.5
         self.state_machine.on_buyer_speech(buyer_text, duration_sec=3.0, leverage_delta=leverage_shift, note="Standard turn exchange")

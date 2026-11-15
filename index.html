@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VerbalPause — Adversarial Voice AI Negotiation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #0c0d10;
+    --bg-card: #15171c;
+    --bg-surface: #1e2027;
+    --bg-input: #121317;
+    --bg-hover: #262933;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --text-primary: #ffffff;
+    --text-secondary: #a0a4b0;
+    --text-muted: #6e7382;
+    --accent: #ffffff;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: none; }
+  *::-webkit-scrollbar { display: none; }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* App Header */
+  header {
+    height: 56px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: #090a0c;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+  }
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    background: #ffffff;
+    color: #000000;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 13px;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-ghost:hover {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+
+  /* Main Container */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 18px 40px;
+    position: relative;
+  }
+  .panel-view {
+    display: none;
+    width: 100%;
+    max-width: 900px;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- VIEW 1: PERSONA SELECTOR --- */
+  .section-hero {
+    text-align: center;
+    max-width: 640px;
+    margin: 10px auto 20px;
+  }
+  .section-hero h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .section-hero p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Preset Grid */
+  .presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .persona-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .persona-card:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-surface);
+    transform: translateY(-2px);
+  }
+  .persona-card.selected {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 1px #ffffff;
+  }
+  .persona-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .persona-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2a2d37;
+    color: #ffffff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .persona-title h3 { font-size: 15px; font-weight: 600; }
+  .persona-title p { font-size: 12.5px; color: var(--text-secondary); }
+  .difficulty-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+  .badge-brutal { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+  .badge-hard { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+  .badge-realistic { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+  .persona-traits { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; }
+
+  /* Custom Generator Box */
+  .custom-gen-box {
+    background: var(--bg-card);
+    border: 1px dashed var(--border-strong);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .custom-gen-box h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .field input, .field textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .field input:focus, .field textarea:focus { border-color: #ffffff; }
+
+  .btn-primary {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { background: #e5e5e5; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* --- VIEW 2: LIVE CALL ROOM --- */
+  .call-room-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .call-prospect-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .call-prospect-info h2 { font-size: 18px; font-weight: 700; }
+  .call-prospect-info p { font-size: 13px; color: var(--text-secondary); }
+  .call-controls { display: flex; align-items: center; gap: 12px; }
+
+  /* Emotion Gauges */
+  .gauges-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .gauge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .gauge-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .gauge-track {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-input);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+
+  /* Interruption Banner */
+  .interruption-alert {
+    display: none;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    align-items: center;
+    gap: 10px;
+    animation: shake 0.3s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* Waveform Visualizer */
+  .visualizer-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 220px;
+    position: relative;
+  }
+  .waveform-bars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 60px;
+  }
+  .waveform-bar {
+    width: 6px;
+    background: #ffffff;
+    border-radius: 3px;
+    height: 12px;
+    transition: height 0.1s ease;
+  }
+  .waveform-bar.active {
+    animation: pulseWave 0.6s infinite alternate ease-in-out;
+  }
+  @keyframes pulseWave {
+    from { height: 8px; }
+    to { height: 50px; }
+  }
+  .call-status-pill {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* Live Transcript Stream */
+  .transcript-stream {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .turn-bubble {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .turn-bubble.user { align-items: flex-end; }
+  .turn-bubble.buyer { align-items: flex-start; }
+  .bubble-text {
+    padding: 8px 14px;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.45;
+  }
+  .turn-bubble.user .bubble-text {
+    background: #27272a;
+    color: #ffffff;
+    border-bottom-right-radius: 2px;
+  }
+  .turn-bubble.buyer .bubble-text {
+    background: var(--bg-surface);
+    color: #e4e4e7;
+    border-bottom-left-radius: 2px;
+  }
+  .turn-bubble.interruption .bubble-text {
+    border: 1px solid #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  /* Call Bottom Actions */
+  .call-bottom-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .btn-mic {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    transition: transform 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-mic.listening {
+    background: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.6);
+  }
+  .call-text-input {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 12px 20px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+  }
+  .call-text-input:focus { border-color: var(--border-strong); }
+
+  /* --- VIEW 3: LEVERAGE REPLAY & SCORECARD --- */
+  .scorecard-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .score-circle {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 3px solid #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .score-circle span { font-size: 10px; color: var(--text-muted); font-weight: 500; }
+
+  /* Turning Points Grid */
+  .turning-points-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .point-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .point-card.peak { border: 1px solid rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.04); }
+  .point-card.fatal { border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); }
+  .point-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .point-card.peak .point-tag { color: #34d399; }
+  .point-card.fatal .point-tag { color: #f87171; }
+  .point-quote {
+    font-size: 13.5px;
+    font-style: italic;
+    color: #e4e4e7;
+    border-left: 2px solid var(--border-strong);
+    padding-left: 10px;
+  }
+  .point-analysis { font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; }
+
+  /* 1-Click Rewind Sandbox */
+  .sandbox-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sandbox-card h3 { font-size: 16px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; }
+  .sandbox-prompt {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: #fca5a5;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .gauges-container, .form-row, .turning-points-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">VP</div>
+    <span>VerbalPause</span>
+  </div>
+  <div class="header-actions">
+    <button class="btn-ghost" id="nav-api-config" title="Configure Backend API URL">⚙️ API URL</button>
+    <button class="btn-ghost" id="nav-new-call" style="display:none;">New Simulation</button>
+  </div>
+</header>
+
+<main>
+  <!-- VIEW 1: SELECT OR GENERATE PERSONA -->
+  <section class="panel-view" id="view-persona" style="display:flex;">
+    <div class="section-hero">
+      <h1>Adversarial Voice Roleplay Simulator</h1>
+      <p>Real buyers don't wait patiently. Practice cold calls and price negotiations against AI buyer personas that interrupt, lose patience, and challenge marketing fluff.</p>
+    </div>
+
+    <div class="presets-grid" id="presets-container"></div>
+
+    <div class="custom-gen-box">
+      <h3><span>⚡</span> 30-Second Custom Persona Synthesizer</h3>
+      <p style="font-size:13px; color:var(--text-secondary); margin-top:-6px;">Paste any prospect company website and title. Our pipeline extracts their tech stack, hidden pain points, and budget friction in seconds.</p>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="custom-company">Target Company Name or URL</label>
+          <input id="custom-company" placeholder="e.g. Stripe, Linear, Datadog">
+        </div>
+        <div class="field">
+          <label for="custom-role">Prospect Job Title</label>
+          <input id="custom-role" placeholder="e.g. VP of Engineering, Head of Procurement">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="custom-context">Additional Context / Product Value Prop (Optional)</label>
+        <textarea id="custom-context" rows="2" placeholder="e.g. Pitching our $40k/yr automated observability platform; they had an outage last quarter."></textarea>
+      </div>
+
+      <button class="btn-primary" id="btn-generate-persona">Generate Custom Prospect & Start Roleplay &rarr;</button>
+    </div>
+  </section>
+
+  <!-- VIEW 2: LIVE VOICE CALL ROOM -->
+  <section class="panel-view" id="view-call">
+    <div class="call-room-header">
+      <div class="call-prospect-info">
+        <div class="persona-avatar" id="call-avatar">MV</div>
+        <div>
+          <h2 id="call-name">Marcus Vance</h2>
+          <p id="call-role">VP of Engineering at Apex Cloud Systems</p>
+        </div>
+      </div>
+      <div class="call-controls">
+        <div class="call-status-pill" id="call-timer">00:00</div>
+        <button class="btn-ghost" id="btn-end-call" style="border-color:#ef4444; color:#f87171;">End Call & Grade</button>
+      </div>
+    </div>
+
+    <!-- Emotion State Meters -->
+    <div class="gauges-container">
+      <div class="gauge-card">
+        <div class="gauge-label">
+          <span>Buyer Patience</span>
+          <span id="label-patience">100%</span>
+        </div>
+        <div class="gauge-track">
+          <div class="gauge-fill" id="bar-patience" style="width:100%; background:#10b981;"></div>
+        </div>
+      </div>
+
+      <div class="gauge-card">
+        <div class="gauge-label">
+          <span>Buyer Skepticism</span>
+          <span id="label-skepticism">50%</span>
+        </div>
+        <div class="gauge-track">
+          <div class="gauge-fill" id="bar-skepticism" style="width:50%; background:#f59e0b;"></div>
+        </div>
+      </div>
+
+      <div class="gauge-card">
+        <div class="gauge-label">
+          <span>Deal Leverage</span>
+          <span id="label-leverage">0.0</span>
+        </div>
+        <div class="gauge-track">
+          <div class="gauge-fill" id="bar-leverage" style="width:50%; background:#ffffff;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Interruption Banner -->
+    <div class="interruption-alert" id="interruption-banner">
+      <span>⚠️</span>
+      <span id="interruption-text">The buyer just cut you off for monologuing without asking discovery questions.</span>
+    </div>
+
+    <!-- Waveform Visualizer -->
+    <div class="visualizer-container">
+      <div class="waveform-bars" id="waveform-bars">
+        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+        <div class="waveform-bar"></div><div class="waveform-bar"></div>
+      </div>
+      <div class="call-status-pill" id="agent-speech-status">Buyer is listening...</div>
+    </div>
+
+    <!-- Live Transcript -->
+    <div class="transcript-stream" id="transcript-stream"></div>
+
+    <!-- Call Bottom Actions -->
+    <div class="call-bottom-bar">
+      <button class="btn-mic" id="btn-mic" title="Click to Speak (Speech-to-Text)">🎙️</button>
+      <input class="call-text-input" id="text-speech-input" placeholder="Speak into mic or type your counter-pitch and hit Enter...">
+      <button class="btn-primary" id="btn-send-turn" style="border-radius:24px; padding:12px 20px;">Send</button>
+    </div>
+  </section>
+
+  <!-- VIEW 3: POST-CALL LEVERAGE SCORECARD -->
+  <section class="panel-view" id="view-scorecard">
+    <div class="scorecard-header">
+      <div>
+        <span style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Simulation Outcome</span>
+        <h2 id="scorecard-outcome" style="font-size:22px; font-weight:800; margin-top:2px;">Next Steps Secured</h2>
+        <p id="scorecard-summary" style="font-size:13px; color:var(--text-secondary); max-width:600px; margin-top:6px;"></p>
+      </div>
+      <div class="score-circle">
+        <div id="scorecard-score">84</div>
+        <span>/ 100</span>
+      </div>
+    </div>
+
+    <!-- Turning Points: Peak Gain vs Fatal Drop -->
+    <div class="turning-points-grid">
+      <div class="point-card peak">
+        <div class="point-tag">🟢 Peak Leverage Moment</div>
+        <div class="point-quote" id="peak-quote">"..."</div>
+        <div class="point-analysis" id="peak-analysis">You earned trust here.</div>
+      </div>
+
+      <div class="point-card fatal">
+        <div class="point-tag">🔴 Fatal Leverage Drop</div>
+        <div class="point-quote" id="fatal-quote">"..."</div>
+        <div class="point-analysis" id="fatal-analysis">Leverage collapsed here.</div>
+      </div>
+    </div>
+
+    <!-- 1-Click Rewind & Re-Pitch Sandbox -->
+    <div class="sandbox-card">
+      <h3><span>🔄</span> 1-Click "Rewind & Re-Pitch" Sandbox</h3>
+      <p style="font-size:13px; color:var(--text-secondary); margin-top:-4px;">Don't let a failed objection linger. Re-record your response to the exact objection where you lost leverage and test if your new phrasing saves the deal:</p>
+      
+      <div class="sandbox-prompt" id="sandbox-objection-prompt">"How does your pricing justify not building this in-house?"</div>
+
+      <div class="field">
+        <label for="sandbox-input">Your Revised Counter-Pitch</label>
+        <textarea id="sandbox-input" rows="3" placeholder="Isolate the objection, anchor on ROI, and ask a closing discovery question..."></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn-primary" id="btn-sandbox-submit">Test New Response on AI Buyer &rarr;</button>
+        <button class="btn-ghost" id="btn-restart-sim">Start New Simulation</button>
+      </div>
+
+      <div id="sandbox-result" style="display:none; margin-top:10px; padding:14px; background:#18181b; border:1px solid #27272a; border-radius:8px; font-size:13.5px; line-height:1.5;"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  let activeSessionId = null;
+  let activePersona = null;
+  let timerInterval = null;
+  let callStartSeconds = 0;
+  let isListening = false;
+  let recognition = null;
+  let synth = window.speechSynthesis;
+
+  // API Configuration (Supports Vercel frontend calling Render backend)
+  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || "";
+  const navApiConfig = document.getElementById("nav-api-config");
+
+  if (navApiConfig) {
+    navApiConfig.addEventListener("click", () => {
+      const next = prompt(
+        "Enter Backend API URL (e.g. https://verbalpause.onrender.com):\nLeave empty for same-origin / relative /api:",
+        apiBase
+      );
+      if (next !== null) {
+        apiBase = next.trim().replace(/\/+$/, "");
+        if (apiBase) {
+          localStorage.setItem("verbalpause_api_url", apiBase);
+        } else {
+          localStorage.removeItem("verbalpause_api_url");
+        }
+        alert("Backend API configured: " + (apiBase || "Same-origin / relative"));
+        loadPresets();
+      }
+    });
+  }
+
+  // DOM Refs
+  const viewPersona = document.getElementById("view-persona");
+  const viewCall = document.getElementById("view-call");
+  const viewScorecard = document.getElementById("view-scorecard");
+  const navNewCall = document.getElementById("nav-new-call");
+
+  const presetsContainer = document.getElementById("presets-container");
+  const customCompany = document.getElementById("custom-company");
+  const customRole = document.getElementById("custom-role");
+  const customContext = document.getElementById("custom-context");
+  const btnGeneratePersona = document.getElementById("btn-generate-persona");
+
+  const callAvatar = document.getElementById("call-avatar");
+  const callName = document.getElementById("call-name");
+  const callRole = document.getElementById("call-role");
+  const callTimer = document.getElementById("call-timer");
+  const btnEndCall = document.getElementById("btn-end-call");
+
+  const barPatience = document.getElementById("bar-patience");
+  const barSkepticism = document.getElementById("bar-skepticism");
+  const barLeverage = document.getElementById("bar-leverage");
+  const labelPatience = document.getElementById("label-patience");
+  const labelSkepticism = document.getElementById("label-skepticism");
+  const labelLeverage = document.getElementById("label-leverage");
+  const interruptionBanner = document.getElementById("interruption-banner");
+  const interruptionText = document.getElementById("interruption-text");
+
+  const waveformBars = document.querySelectorAll(".waveform-bar");
+  const agentSpeechStatus = document.getElementById("agent-speech-status");
+  const transcriptStream = document.getElementById("transcript-stream");
+  const btnMic = document.getElementById("btn-mic");
+  const textSpeechInput = document.getElementById("text-speech-input");
+  const btnSendTurn = document.getElementById("btn-send-turn");
+
+  const scorecardScore = document.getElementById("scorecard-score");
+  const scorecardOutcome = document.getElementById("scorecard-outcome");
+  const scorecardSummary = document.getElementById("scorecard-summary");
+  const peakQuote = document.getElementById("peak-quote");
+  const peakAnalysis = document.getElementById("peak-analysis");
+  const fatalQuote = document.getElementById("fatal-quote");
+  const fatalAnalysis = document.getElementById("fatal-analysis");
+  const sandboxObjectionPrompt = document.getElementById("sandbox-objection-prompt");
+  const sandboxInput = document.getElementById("sandbox-input");
+  const btnSandboxSubmit = document.getElementById("btn-sandbox-submit");
+  const sandboxResult = document.getElementById("sandbox-result");
+  const btnRestartSim = document.getElementById("btn-restart-sim");
+
+  // Web Speech Setup
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRec) {
+    recognition = new SpeechRec();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[e.results.length - 1][0].transcript.trim();
+      if (transcript) {
+        sendTurn(transcript);
+      }
+    };
+    recognition.onerror = () => {
+      stopMic();
+    };
+  }
+
+  // Load Presets
+  async function loadPresets() {
+    try {
+      const res = await fetch(`${apiBase}/api/personas/presets`);
+      const presets = await res.json();
+      presetsContainer.innerHTML = "";
+      presets.forEach((p) => {
+        const card = document.createElement("div");
+        card.className = "persona-card";
+        const badgeClass = p.difficulty_level === "Brutal" ? "badge-brutal" : (p.difficulty_level === "Hard" ? "badge-hard" : "badge-realistic");
+        card.innerHTML = `
+          <div class="difficulty-badge ${badgeClass}">${p.difficulty_level}</div>
+          <div class="persona-header">
+            <div class="persona-avatar">${p.avatar_initials}</div>
+            <div class="persona-title">
+              <h3>${p.name}</h3>
+              <p>${p.role} @ ${p.company}</p>
+            </div>
+          </div>
+          <p class="persona-traits">${p.temperament}</p>
+          <div style="font-size:11.5px; color:#9ca3af; margin-top:auto;">
+            <strong>Primary Obstacle:</strong> ${p.primary_objections[0]}
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          document.querySelectorAll(".persona-card").forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          startSession(p.id);
+        });
+        presetsContainer.appendChild(card);
+      });
+    } catch (_) {}
+  }
+
+  // Generate Custom Persona
+  btnGeneratePersona.addEventListener("click", async () => {
+    const comp = customCompany.value.trim();
+    const role = customRole.value.trim();
+    if (!comp || !role) {
+      alert("Please provide company name and prospect role.");
+      return;
+    }
+
+    btnGeneratePersona.disabled = true;
+    btnGeneratePersona.textContent = "Researching Company & Synthesizing Persona...";
+
+    try {
+      const res = await fetch(`${apiBase}/api/personas/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company_name_or_url: comp,
+          prospect_role: role,
+          additional_context: customContext.value.trim() || null
+        })
+      });
+      if (!res.ok) throw new Error("Failed to generate persona.");
+      const persona = await res.json();
+      startSession(null, persona);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      btnGeneratePersona.disabled = false;
+      btnGeneratePersona.textContent = "Generate Custom Prospect & Start Roleplay →";
+    }
+  });
+
+  // Start Session
+  async function startSession(presetId, customPersona = null) {
+    try {
+      const res = await fetch(`${apiBase}/api/sessions/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          persona_id: presetId,
+          custom_persona: customPersona
+        })
+      });
+      const data = await res.json();
+      activeSessionId = data.session_id;
+      activePersona = data.persona;
+
+      showView("call");
+      callAvatar.textContent = activePersona.avatar_initials;
+      callName.textContent = activePersona.name;
+      callRole.textContent = `${activePersona.role} @ ${activePersona.company}`;
+      
+      transcriptStream.innerHTML = "";
+      addTranscriptBubble("buyer", data.opening_greeting);
+      speakText(data.opening_greeting);
+
+      updateGauges(data.initial_patience, data.initial_skepticism, data.initial_leverage);
+      startTimer();
+    } catch (err) {
+      alert("Could not start session: " + err.message);
+    }
+  }
+
+  // Turn Execution
+  async function sendTurn(text) {
+    if (!activeSessionId || !text) return;
+    btnSendTurn.disabled = true;
+    btnMic.disabled = true;
+    textSpeechInput.value = "";
+    addTranscriptBubble("user", text);
+
+    agentSpeechStatus.textContent = "Buyer evaluating...";
+    interruptionBanner.style.display = "none";
+
+    try {
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/turn`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript: text })
+      });
+      if (!res.ok) throw new Error("Turn failed.");
+      const data = await res.json();
+      const reply = (data.buyer_reply && data.buyer_reply.trim())
+        ? data.buyer_reply.trim()
+        : "I'm listening, but what's your point here?";
+
+      updateGauges(data.patience, data.skepticism, data.deal_leverage);
+
+      if (data.is_interruption) {
+        interruptionBanner.style.display = "flex";
+        interruptionText.textContent = `⚠️ The buyer cut you off: "${reply}"`;
+      } else if (data.patience <= 0.0) {
+        interruptionBanner.style.display = "flex";
+        interruptionText.textContent = `🛑 The buyer lost all patience and ended the call.`;
+      }
+
+      addTranscriptBubble("buyer", reply, data.is_interruption);
+      speakText(reply);
+    } catch (err) {
+      agentSpeechStatus.textContent = "Error processing turn. Try again.";
+      waveformBars.forEach(b => b.classList.remove("active"));
+    } finally {
+      btnSendTurn.disabled = false;
+      btnMic.disabled = false;
+    }
+  }
+
+  function addTranscriptBubble(role, text, isInterruption = false) {
+    const bubble = document.createElement("div");
+    bubble.className = `turn-bubble ${role}` + (isInterruption ? " interruption" : "");
+    bubble.innerHTML = `<div class="bubble-text">${escapeHtml(text)}</div>`;
+    transcriptStream.appendChild(bubble);
+    transcriptStream.scrollTop = transcriptStream.scrollHeight;
+  }
+
+  function updateGauges(patience, skepticism, leverage) {
+    labelPatience.textContent = `${Math.round(patience)}%`;
+    barPatience.style.width = `${Math.min(100, Math.max(0, patience))}%`;
+    barPatience.style.background = patience > 60 ? "#10b981" : (patience > 35 ? "#f59e0b" : "#ef4444");
+
+    labelSkepticism.textContent = `${Math.round(skepticism)}%`;
+    barSkepticism.style.width = `${Math.min(100, Math.max(0, skepticism))}%`;
+
+    labelLeverage.textContent = `${leverage > 0 ? "+" : ""}${leverage}`;
+    const levPct = Math.min(100, Math.max(0, (leverage + 10) * 5));
+    barLeverage.style.width = `${levPct}%`;
+  }
+
+  // TTS Output
+  let speechTimeout = null;
+
+  function speakText(text) {
+    if (speechTimeout) {
+      clearTimeout(speechTimeout);
+      speechTimeout = null;
+    }
+    const clean = (text || "").trim();
+    if (!synth || !clean) {
+      agentSpeechStatus.textContent = "Buyer is listening...";
+      waveformBars.forEach(b => b.classList.remove("active"));
+      return;
+    }
+    synth.cancel();
+    const personaName = (activePersona && activePersona.name) ? activePersona.name : "Buyer";
+    agentSpeechStatus.textContent = `${personaName} is speaking...`;
+    waveformBars.forEach(b => b.classList.add("active"));
+
+    const utter = new SpeechSynthesisUtterance(clean);
+    utter.rate = 1.05;
+
+    const endSpeech = () => {
+      if (speechTimeout) {
+        clearTimeout(speechTimeout);
+        speechTimeout = null;
+      }
+      agentSpeechStatus.textContent = "Buyer is listening...";
+      waveformBars.forEach(b => b.classList.remove("active"));
+    };
+
+    utter.onend = endSpeech;
+    utter.onerror = endSpeech;
+
+    const estimatedDurationMs = Math.max(2500, clean.split(" ").length * 500);
+    speechTimeout = setTimeout(endSpeech, estimatedDurationMs);
+
+    try {
+      synth.speak(utter);
+    } catch (_) {
+      endSpeech();
+    }
+  }
+
+  // Timer
+  function startTimer() {
+    clearInterval(timerInterval);
+    callStartSeconds = 0;
+    timerInterval = setInterval(() => {
+      callStartSeconds++;
+      const m = String(Math.floor(callStartSeconds / 60)).padStart(2, '0');
+      const s = String(callStartSeconds % 60).padStart(2, '0');
+      callTimer.textContent = `${m}:${s}`;
+    }, 1000);
+  }
+
+  // End Call & Grade
+  btnEndCall.addEventListener("click", async () => {
+    if (!activeSessionId) return;
+    clearInterval(timerInterval);
+    if (synth) synth.cancel();
+    stopMic();
+
+    btnEndCall.disabled = true;
+    btnEndCall.textContent = "Analyzing Call...";
+
+    try {
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/end`, { method: "POST" });
+      const scorecard = await res.json();
+
+      showView("scorecard");
+      scorecardScore.textContent = scorecard.overall_score;
+      scorecardOutcome.textContent = scorecard.outcome_label;
+      scorecardSummary.textContent = scorecard.coaching_summary;
+
+      peakQuote.textContent = scorecard.peak_moment ? `"${scorecard.peak_moment.quote}"` : "None detected.";
+      peakAnalysis.textContent = scorecard.peak_moment ? scorecard.peak_moment.analysis : "";
+
+      fatalQuote.textContent = scorecard.fatal_drop_moment ? `"${scorecard.fatal_drop_moment.quote}"` : "None detected.";
+      fatalAnalysis.textContent = scorecard.fatal_drop_moment ? scorecard.fatal_drop_moment.analysis : "";
+
+      sandboxObjectionPrompt.textContent = `"${scorecard.re_pitch_sandbox_prompt}"`;
+      sandboxInput.value = "";
+      sandboxResult.style.display = "none";
+    } catch (err) {
+      alert("Error grading call: " + err.message);
+    } finally {
+      btnEndCall.disabled = false;
+      btnEndCall.textContent = "End Call & Grade";
+    }
+  });
+
+  // Rewind Sandbox Retry
+  btnSandboxSubmit.addEventListener("click", async () => {
+    const text = sandboxInput.value.trim();
+    if (!text || !activeSessionId) return;
+
+    btnSandboxSubmit.disabled = true;
+    btnSandboxSubmit.textContent = "Testing Response on Buyer...";
+
+    try {
+      const res = await fetch(`${apiBase}/api/sessions/${activeSessionId}/retry-turn`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          objection_prompt: sandboxObjectionPrompt.textContent.replace(/"/g, ''),
+          candidate_new_response: text
+        })
+      });
+      const data = await res.json();
+      sandboxResult.style.display = "block";
+      sandboxResult.innerHTML = `<strong>AI Buyer Reaction:</strong><br>${escapeHtml(data.buyer_reaction)}`;
+    } catch (_) {}
+    finally {
+      btnSandboxSubmit.disabled = false;
+      btnSandboxSubmit.textContent = "Test New Response on AI Buyer →";
+    }
+  });
+
+  // Mic toggles
+  btnMic.addEventListener("click", () => {
+    if (isListening) stopMic();
+    else startMic();
+  });
+
+  function startMic() {
+    if (!recognition) {
+      alert("Speech recognition is not supported in this browser. Please type your response.");
+      return;
+    }
+    try {
+      recognition.start();
+      isListening = true;
+      btnMic.classList.add("listening");
+    } catch (_) {}
+  }
+
+  function stopMic() {
+    if (!recognition) return;
+    try {
+      recognition.stop();
+      isListening = false;
+      btnMic.classList.remove("listening");
+    } catch (_) {}
+  }
+
+  btnSendTurn.addEventListener("click", () => {
+    const text = textSpeechInput.value.trim();
+    if (text) sendTurn(text);
+  });
+  textSpeechInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const text = textSpeechInput.value.trim();
+      if (text) sendTurn(text);
+    }
+  });
+
+  // Navigation
+  function showView(view) {
+    viewPersona.style.display = view === "persona" ? "flex" : "none";
+    viewCall.style.display = view === "call" ? "flex" : "none";
+    viewScorecard.style.display = view === "scorecard" ? "flex" : "none";
+    navNewCall.style.display = view === "persona" ? "none" : "block";
+
+    if (view === "persona") {
+      // Clear persistent selection border so no card remains stuck selected after leaving a session
+      document.querySelectorAll(".persona-card").forEach(c => c.classList.remove("selected"));
+      activeSessionId = null;
+      activePersona = null;
+    }
+  }
+
+  navNewCall.addEventListener("click", () => {
+    if (confirm("Abandon active simulation?")) {
+      clearInterval(timerInterval);
+      if (synth) synth.cancel();
+      stopMic();
+      showView("persona");
+    }
+  });
+  btnRestartSim.addEventListener("click", () => showView("persona"));
+
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // Init
+  loadPresets();
+</script>
+</body>
+</html>

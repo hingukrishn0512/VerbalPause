@@ -99,12 +99,29 @@ TAVILY_API_KEY=your_tavily_api_key_here
 ```
 
 ### 3. Launch the Server
+
+#### Option A: Native Python
 ```bash
 uvicorn backend.app.main:app --reload --port 8000
 ```
 
+#### Option B: Docker Compose
+```bash
+docker compose up --build
+```
+
 Open your browser to:
 👉 **`http://localhost:8000`** to start roleplaying immediately!
+
+---
+
+## 🚀 Cloud Deployment (Render + Vercel)
+
+VerbalPause is designed for cloud-native deployment in minutes:
+- **Backend (Render):** Deploy as a Docker Web Service with zero-config auto-deploys via `render.yaml`.
+- **Frontend (Vercel):** Deploy as a global static edge application via `vercel.json`.
+
+See the complete step-by-step instructions in [DEPLOYMENT.md](file:///C:/Users/Yash/Desktop/VerbalPause/VerbalPause/DEPLOYMENT.md).
 
 ---
 

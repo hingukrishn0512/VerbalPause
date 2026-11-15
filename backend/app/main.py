@@ -37,6 +37,9 @@ def serve_index():
     index_file = os.path.join(static_dir, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
+    root_index = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "index.html")
+    if os.path.exists(root_index):
+        return FileResponse(root_index)
     return {"message": "VerbalPause API is running. Open /docs for Swagger UI."}
 
 
@@ -48,3 +51,9 @@ def health_check():
         "groq_configured": bool(settings.groq_api_key),
         "tavily_configured": bool(settings.tavily_api_key)
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=port, reload=False)

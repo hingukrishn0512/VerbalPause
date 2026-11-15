@@ -14,7 +14,7 @@ INTERRUPTION_TEMPLATES = [
     "Sorry to cut in, but I have a hard stop in 3 minutes. What is the actual bottom-line ROI here?",
     "Hold on a second. That sounds like marketing fluff. How does this actually integrate with our existing stack?",
     "Wait, let me pause you right there. What does this actually cost? Don't give me a range, give me real numbers.",
-    "Alex, look—I've heard this exact pitch from three other vendors this week. What specifically makes you different?",
+    "Look—I've heard this exact pitch from three other vendors this week. What specifically makes you different?",
     "Hang on. You've been talking for a while. Why should my engineering team care about this right now?",
 ]
 
