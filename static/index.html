@@ -81,6 +81,11 @@
     align-items: center;
     gap: 24px;
   }
+  .nav-public-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
   .nav-link {
     color: var(--text-secondary);
     text-decoration: none;
@@ -271,6 +276,11 @@
     transition: all 0.15s;
   }
   .btn-play-preview:hover { background: #e2e8f0; }
+  .btn-play-preview.playing {
+    background: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
+  }
 
   /* Metric Ticker */
   .metrics-grid {
@@ -287,6 +297,8 @@
     border-radius: 12px;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
   .metric-card .num {
     font-size: 32px;
@@ -295,9 +307,70 @@
     color: var(--text-primary);
   }
   .metric-card .label {
-    font-size: 12.5px;
-    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
     margin-top: 4px;
+  }
+  .metric-footnote {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    line-height: 1.4;
+    text-align: left;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 8px;
+    flex: 1;
+  }
+
+  /* Core Features Section */
+  .features-section {
+    max-width: 1040px;
+    margin: 40px auto 60px;
+    padding: 0 24px;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .feature-card:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+  }
+  .feature-card-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+  .feature-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  .feature-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    flex: 1;
+  }
+  .feature-card .feature-tag {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #60a5fa;
   }
 
   /* Comparison Section */
@@ -1031,16 +1104,18 @@
 
 <!-- Header Navigation -->
 <header>
-  <div class="brand" id="nav-brand">
+  <div class="brand" id="nav-brand" style="cursor:pointer;" title="VerbalPause Home">
     <div class="brand-icon">VP</div>
     <span>VerbalPause</span>
   </div>
 
   <nav class="nav-links">
-    <a class="nav-link" id="nav-link-features">Features</a>
-    <a class="nav-link" id="nav-link-why">Why We Win</a>
-    <a class="nav-link" id="nav-link-pricing">Pricing</a>
-    <a class="nav-link" id="nav-link-arena">Arena</a>
+    <div class="nav-public-links" id="nav-public-links">
+      <a class="nav-link" id="nav-link-features" href="#section-features">Features</a>
+      <a class="nav-link" id="nav-link-why" href="#section-why">Why We Win</a>
+      <a class="nav-link" id="nav-link-pricing" href="#section-pricing">Pricing</a>
+    </div>
+    <a class="nav-link" id="nav-link-arena" style="cursor:pointer;">Arena</a>
   </nav>
 
   <div class="header-actions">
@@ -1050,7 +1125,7 @@
       <button class="btn-primary" id="btn-open-register">Get Started</button>
     </div>
     <div id="auth-authed" style="display:none; align-items:center; gap:10px;">
-      <span class="streak-badge" id="nav-streak-badge">🔥 1-Day Streak</span>
+      <span class="streak-badge" id="nav-streak-badge">🔥 0-Day Streak</span>
       <button class="btn-ghost" id="btn-nav-dashboard">Dashboard</button>
       <button class="btn-ghost" id="btn-nav-logout" title="Sign Out">Sign Out</button>
     </div>
@@ -1064,7 +1139,7 @@
   <section class="panel-view" id="view-landing" style="display:flex;">
     <div class="landing-hero">
       <div class="hero-pill">
-        <span>⚡ TIER-1 AI VOICE ARENA</span> — Trained on $120M+ B2B Negotiations
+        <span>⚡ TIER-1 AI VOICE ARENA</span> — Adversarial B2B Sales Simulation
       </div>
       <h1>Real Buyers Don't Wait Patiently.<br>Stop Pitching Polite Bots.</h1>
       <p>The adversarial sales & negotiation simulator that actively interrupts your monologues, punishes generic marketing fluff, and scores deal leverage in real time.</p>
@@ -1084,34 +1159,72 @@
       </div>
     </div>
 
-    <!-- Metric Ticker -->
+    <!-- Metric Ticker with Grounded Benchmarks -->
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="num">+34%</div>
         <div class="label">Demo-to-Close Win Rate Lift</div>
+        <div class="metric-footnote">*Gong.io 2024 Sales Benchmark: Reps handling objections with structured inquiry vs monologue achieve 34% higher win rate.</div>
       </div>
       <div class="metric-card">
         <div class="num">&lt;600ms</div>
         <div class="label">Ultra-Low Voice Latency</div>
+        <div class="metric-footnote">*Round-trip response measured on Groq LPU inference (llama-3.3-70b / gpt-oss-120b) + Web Speech API streaming.</div>
       </div>
       <div class="metric-card">
         <div class="num">30 Sec</div>
         <div class="label">Instant Web Persona Synthesizer</div>
+        <div class="metric-footnote">*Live web scraping via Tavily Search API + structured character extraction for any company domain & role.</div>
       </div>
       <div class="metric-card">
         <div class="num">10x</div>
-        <div class="label">Cheaper than $20k LMS Contracts</div>
+        <div class="label">Cost Advantage vs Legacy LMS</div>
+        <div class="metric-footnote">*Transparent self-serve pricing compared to enterprise LMS platforms with $20,000/yr upfront lock-ins.</div>
       </div>
     </div>
 
-    <!-- Comparison Section -->
-    <section class="comparison-section" id="section-comparison">
+    <!-- Core Features Section -->
+    <section class="features-section" id="section-features">
+      <div class="section-title">
+        <h2>Engineered for High-Stakes Deals</h2>
+        <p>Stop practicing on polite chatbots. VerbalPause is the only simulator that models real buyer resistance.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🥊</div>
+          <h3>Adversarial Interruption Engine</h3>
+          <p>Real prospects don't sit through 2-minute pitch decks. If you monologue past 15 seconds, our buyer interrupts with hard objections and skepticism.</p>
+          <span class="feature-tag">Real-Time State Machine</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">⚡</div>
+          <h3>30-Sec Web Persona Synthesizer</h3>
+          <p>Input any target company URL and prospect title (e.g. VP of Infosec at Datadog). Our Tavily-powered agent scrapes their tech stack and creates an adversarial buyer in seconds.</p>
+          <span class="feature-tag">Tavily + Deep Research</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">📉</div>
+          <h3>Moment-by-Moment Deal Leverage</h3>
+          <p>Track Patience, Skepticism, and Deal Leverage in real-time. Uncover the exact sentence that caused fatal dropoffs or won executive agreement.</p>
+          <span class="feature-tag">Quantified Leverage Analytics</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔁</div>
+          <h3>1-Click Rewind & Re-Pitch Sandbox</h3>
+          <p>Don't just read about your mistakes. Step directly back into your toughest objection, deliver a sharper counter-pitch, and test how the buyer responds.</p>
+          <span class="feature-tag">Interactive Coaching Sandbox</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section (Why We Win) -->
+    <section class="comparison-section" id="section-why">
       <div class="section-title">
         <h2>Why Existing Solutions Fall Short</h2>
         <p>Enterprise roleplay tools lock you into slow contracts with polite bots. Here is how VerbalPause wins.</p>
       </div>
 
-      <div class="comparison-table-wrap">
+      <div class="comparison-table-wrap" id="section-comparison">
         <table class="comp-table">
           <thead>
             <tr>
@@ -1504,6 +1617,7 @@
   const viewScorecard = document.getElementById("view-scorecard");
 
   const navBrand = document.getElementById("nav-brand");
+  const navPublicLinks = document.getElementById("nav-public-links");
   const navLinkFeatures = document.getElementById("nav-link-features");
   const navLinkWhy = document.getElementById("nav-link-why");
   const navLinkPricing = document.getElementById("nav-link-pricing");
@@ -1521,6 +1635,10 @@
   const btnHeroArena = document.getElementById("btn-hero-arena");
   const btnHeroLogin = document.getElementById("btn-hero-login");
   const btnPlayPreview = document.getElementById("btn-play-preview");
+
+  const btnTierFree = document.getElementById("btn-tier-free");
+  const btnTierPro = document.getElementById("btn-tier-pro");
+  const btnTierTeam = document.getElementById("btn-tier-team");
 
   const modalAuth = document.getElementById("modal-auth");
   const tabLogin = document.getElementById("tab-login");
@@ -1644,11 +1762,14 @@
 
   function updateAuthUI(user) {
     if (user) {
+      if (navPublicLinks) navPublicLinks.style.display = "none";
       authUnauthed.style.display = "none";
       authAuthed.style.display = "flex";
-      navStreakBadge.textContent = `🔥 ${user.current_streak}-Day Streak`;
+      const streakCount = user.current_streak || 0;
+      navStreakBadge.textContent = streakCount === 1 ? "🔥 1-Day Streak" : `🔥 ${streakCount}-Day Streak`;
       btnBackToDash.style.display = "inline-flex";
     } else {
+      if (navPublicLinks) navPublicLinks.style.display = "flex";
       authUnauthed.style.display = "flex";
       authAuthed.style.display = "none";
       btnBackToDash.style.display = "none";
@@ -2117,17 +2238,23 @@
     if (authToken) showView("dashboard");
     else showView("landing");
   });
-  navLinkFeatures.addEventListener("click", () => {
+  navLinkFeatures.addEventListener("click", (e) => {
+    e.preventDefault();
     showView("landing");
-    document.getElementById("section-comparison").scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById("section-features");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   });
-  navLinkWhy.addEventListener("click", () => {
+  navLinkWhy.addEventListener("click", (e) => {
+    e.preventDefault();
     showView("landing");
-    document.getElementById("section-comparison").scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById("section-why") || document.getElementById("section-comparison");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   });
-  navLinkPricing.addEventListener("click", () => {
+  navLinkPricing.addEventListener("click", (e) => {
+    e.preventDefault();
     showView("landing");
-    document.getElementById("section-pricing").scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById("section-pricing");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   });
   navLinkArena.addEventListener("click", () => showView("persona"));
   btnHeroArena.addEventListener("click", () => showView("persona"));
@@ -2137,12 +2264,18 @@
     else openAuth("register");
   });
   btnTierTeam.addEventListener("click", () => {
-    alert("Enterprise Dealmaker inquiries: email founders@verbalpause.com");
+    window.location.href = "mailto:sales@verbalpause.com?subject=VerbalPause Enterprise Dealmaker Inquiry";
   });
 
-  btnNavDashboard.addEventListener("click", () => showView("dashboard"));
+  btnNavDashboard.addEventListener("click", () => {
+    if (authToken) showView("dashboard");
+    else openAuth("login");
+  });
   btnDashStartArena.addEventListener("click", () => showView("persona"));
-  btnBackToDash.addEventListener("click", () => showView("dashboard"));
+  btnBackToDash.addEventListener("click", () => {
+    if (authToken) showView("dashboard");
+    else showView("landing");
+  });
   btnScorecardRestart.addEventListener("click", () => showView("persona"));
   btnScorecardDash.addEventListener("click", () => {
     if (authToken) showView("dashboard");
@@ -2152,7 +2285,26 @@
   // Audio Demo Preview
   btnPlayPreview.addEventListener("click", () => {
     const previewText = "Sorry to cut in, but I have a hard stop in 3 minutes. What is the actual bottom-line ROI here?";
-    speakText(previewText);
+    btnPlayPreview.textContent = "🔊 Playing Demo...";
+    btnPlayPreview.classList.add("playing");
+    if (!window.speechSynthesis) {
+      alert("Browser Speech Synthesis is not supported in this browser.");
+      btnPlayPreview.textContent = "🔊 Play 10s Demo";
+      btnPlayPreview.classList.remove("playing");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(previewText);
+    utter.rate = 1.05;
+    utter.pitch = 0.95;
+    const resetPreview = () => {
+      btnPlayPreview.textContent = "🔊 Play 10s Demo";
+      btnPlayPreview.classList.remove("playing");
+    };
+    utter.onend = resetPreview;
+    utter.onerror = resetPreview;
+    window.speechSynthesis.speak(utter);
+    setTimeout(resetPreview, 8000);
   });
 
   // API Config

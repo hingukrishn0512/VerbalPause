@@ -186,8 +186,35 @@ async def end_simulation(
         )
         db.add(call_record)
         db.commit()
+
+        # Update candidate practice streak (strictly LeetCode rules: only increments on real practice)
+        user_turns = [t for t in session.get("turns", []) if t.get("role") == "user"]
+        if len(user_turns) > 0 and scorecard.overall_score > 0:
+            from datetime import date, datetime
+            user = db.query(User).filter(User.id == user_id).first()
+            if user:
+                today_str = date.today().isoformat()
+                if user.last_active_date != today_str:
+                    if user.last_active_date:
+                        try:
+                            last_date = datetime.strptime(user.last_active_date, "%Y-%m-%d").date()
+                            delta_days = (date.today() - last_date).days
+                            if delta_days == 1:
+                                user.current_streak += 1
+                            else:
+                                user.current_streak = 1
+                        except Exception:
+                            user.current_streak = 1
+                    else:
+                        user.current_streak = 1
+
+                    if user.current_streak > user.longest_streak:
+                        user.longest_streak = user.current_streak
+                    user.last_active_date = today_str
+                    db.commit()
+                    db.refresh(user)
     except Exception as e:
-        logger.warning(f"Failed to persist CallSessionRecord: {e}")
+        logger.warning(f"Failed to persist CallSessionRecord or update streak: {e}")
 
     return scorecard
 

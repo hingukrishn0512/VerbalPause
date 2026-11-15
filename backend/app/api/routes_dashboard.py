@@ -60,6 +60,18 @@ def get_dashboard_stats(
     db: Session = Depends(get_db)
 ):
     """Calculates aggregate negotiation KPIs and personalized AI coaching diagnoses."""
+    # Sync streak if candidate missed practice days
+    if current_user.last_active_date:
+        try:
+            last_date = datetime.strptime(current_user.last_active_date, "%Y-%m-%d").date()
+            delta_days = (datetime.utcnow().date() - last_date).days
+            if delta_days > 1 and current_user.current_streak > 0:
+                current_user.current_streak = 0
+                db.commit()
+                db.refresh(current_user)
+        except Exception:
+            pass
+
     sessions = (
         db.query(CallSessionRecord)
         .filter(CallSessionRecord.user_id == current_user.id)
@@ -68,11 +80,12 @@ def get_dashboard_stats(
 
     total_sessions = len(sessions)
     if total_sessions == 0:
+        streak_label = "🔥 Complete your first session to start your streak!" if current_user.current_streak == 0 else f"🔥 {current_user.current_streak}-Day Practice Streak! Keep your momentum going."
         return DashboardStatsResponse(
             user_name=current_user.full_name,
             current_streak=current_user.current_streak,
             longest_streak=current_user.longest_streak,
-            streak_status="🔥 Ready for your first session today!",
+            streak_status=streak_label,
             total_sessions=0,
             average_score=0.0,
             win_rate_pct=0.0,

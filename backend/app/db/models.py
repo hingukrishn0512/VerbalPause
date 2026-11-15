@@ -11,8 +11,8 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     full_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    current_streak = Column(Integer, default=1)
-    longest_streak = Column(Integer, default=1)
+    current_streak = Column(Integer, default=0)
+    longest_streak = Column(Integer, default=0)
     last_active_date = Column(String, default="")  # Stored as YYYY-MM-DD
     created_at = Column(DateTime, default=datetime.utcnow)
 

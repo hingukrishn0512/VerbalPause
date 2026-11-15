@@ -62,14 +62,13 @@ def register_user(payload: RegisterRequest, db: Session = Depends(get_db)):
             detail="An account with this email already exists."
         )
 
-    today_str = date.today().isoformat()
     new_user = User(
         email=clean_email,
         full_name=payload.full_name.strip(),
         hashed_password=hash_password(payload.password),
-        current_streak=1,
-        longest_streak=1,
-        last_active_date=today_str,
+        current_streak=0,
+        longest_streak=0,
+        last_active_date="",
     )
     db.add(new_user)
     db.commit()
@@ -85,7 +84,7 @@ def register_user(payload: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=AuthResponse)
 def login_user(payload: LoginRequest, db: Session = Depends(get_db)):
-    """Authenticates credentials and returns a JWT access token."""
+    """Authenticates credentials and returns a JWT access token without falsely inflating streaks."""
     clean_email = payload.email.lower().strip()
     user = db.query(User).filter(User.email == clean_email).first()
     if not user or not verify_password(payload.password, user.hashed_password):
@@ -94,27 +93,19 @@ def login_user(payload: LoginRequest, db: Session = Depends(get_db)):
             detail="Incorrect email or password."
         )
 
-    # Check and update daily practice streak
-    today_str = date.today().isoformat()
-    if user.last_active_date != today_str:
-        if user.last_active_date:
-            try:
-                last_date = datetime.strptime(user.last_active_date, "%Y-%m-%d").date()
-                delta_days = (date.today() - last_date).days
-                if delta_days == 1:
-                    user.current_streak += 1
-                elif delta_days > 1:
-                    user.current_streak = 1
-            except Exception:
-                user.current_streak = 1
-        else:
-            user.current_streak = 1
-
-        if user.current_streak > user.longest_streak:
-            user.longest_streak = user.current_streak
-        user.last_active_date = today_str
-        db.commit()
-        db.refresh(user)
+    # Sync daily practice streak:
+    # If the candidate missed yesterday and earlier without completing a session, streak resets to 0.
+    # Logging in alone does NOT increment practice streaks (strictly LeetCode-style).
+    if user.last_active_date:
+        try:
+            last_date = datetime.strptime(user.last_active_date, "%Y-%m-%d").date()
+            delta_days = (date.today() - last_date).days
+            if delta_days > 1 and user.current_streak > 0:
+                user.current_streak = 0
+                db.commit()
+                db.refresh(user)
+        except Exception:
+            pass
 
     token = create_access_token({"sub": user.email, "id": user.id})
     return {
@@ -125,6 +116,16 @@ def login_user(payload: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UserResponse)
-def get_user_profile(current_user: User = Depends(get_current_user)):
-    """Fetches the authenticated user profile and streak metrics."""
+def get_user_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Fetches the authenticated user profile and validated streak metrics."""
+    if current_user.last_active_date:
+        try:
+            last_date = datetime.strptime(current_user.last_active_date, "%Y-%m-%d").date()
+            delta_days = (date.today() - last_date).days
+            if delta_days > 1 and current_user.current_streak > 0:
+                current_user.current_streak = 0
+                db.commit()
+                db.refresh(current_user)
+        except Exception:
+            pass
     return current_user
