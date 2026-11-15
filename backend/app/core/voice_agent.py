@@ -16,12 +16,17 @@ class VoiceAgentRunner:
     def __init__(self, persona: BuyerPersona, state_machine: NegotiationStateMachine):
         self.persona = persona
         self.state_machine = state_machine
-        self.llm = ChatGroq(
-            model=settings.default_model,
-            temperature=0.35,
-            max_tokens=150,  # enforce short phone-call answers (1-3 sentences)
-            groq_api_key=settings.groq_api_key
-        )
+        llm_kwargs = {
+            "model": settings.default_model,
+            "temperature": 0.35,
+            "max_tokens": 600,  # headroom for reasoning tokens + spoken response
+            "groq_api_key": settings.groq_api_key
+        }
+        try:
+            self.llm = ChatGroq(**llm_kwargs, reasoning_effort="low")
+        except Exception:
+            self.llm = ChatGroq(**llm_kwargs)
+
         self.messages = [
             SystemMessage(content=persona.system_prompt)
         ]
@@ -60,10 +65,20 @@ class VoiceAgentRunner:
         response = self.llm.invoke(self.messages)
         latency_ms = int((time.perf_counter() - t0) * 1000)
 
-        buyer_text = response.content.strip()
+        buyer_text = (response.content or "").strip()
         # Clean up any quotes or stage directions
         if buyer_text.startswith('"') and buyer_text.endswith('"'):
-            buyer_text = buyer_text[1:-1]
+            buyer_text = buyer_text[1:-1].strip()
+
+        # Fail-safe: If response content was empty due to token or formatting issues, synthesize in-character response
+        if not buyer_text:
+            reasoning = response.additional_kwargs.get("reasoning_content", "")
+            if reasoning and len(reasoning.strip()) > 10:
+                # Extract last sentence if available
+                sentences = [s.strip() for s in reasoning.replace("\n", " ").split(".") if len(s.strip()) > 10]
+                buyer_text = sentences[-1] + "." if sentences else ""
+            if not buyer_text:
+                buyer_text = f"I'm listening, but you haven't given me a reason not to jump to my next meeting. What's the bottom line here?"
 
         self.messages.append(AIMessage(content=buyer_text))
 

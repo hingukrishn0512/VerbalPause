@@ -892,18 +892,22 @@
       });
       if (!res.ok) throw new Error("Turn failed.");
       const data = await res.json();
+      const reply = (data.buyer_reply && data.buyer_reply.trim())
+        ? data.buyer_reply.trim()
+        : "I'm listening, but what's your point here?";
 
       updateGauges(data.patience, data.skepticism, data.deal_leverage);
 
       if (data.is_interruption) {
         interruptionBanner.style.display = "flex";
-        interruptionText.textContent = `⚠️ The buyer cut you off: "${data.buyer_reply}"`;
+        interruptionText.textContent = `⚠️ The buyer cut you off: "${reply}"`;
       }
 
-      addTranscriptBubble("buyer", data.buyer_reply, data.is_interruption);
-      speakText(data.buyer_reply);
+      addTranscriptBubble("buyer", reply, data.is_interruption);
+      speakText(reply);
     } catch (err) {
-      agentSpeechStatus.textContent = "Error processing turn.";
+      agentSpeechStatus.textContent = "Error processing turn. Try again.";
+      waveformBars.forEach(b => b.classList.remove("active"));
     }
   }
 
@@ -929,19 +933,47 @@
   }
 
   // TTS Output
+  let speechTimeout = null;
+
   function speakText(text) {
-    if (!synth) return;
+    if (speechTimeout) {
+      clearTimeout(speechTimeout);
+      speechTimeout = null;
+    }
+    const clean = (text || "").trim();
+    if (!synth || !clean) {
+      agentSpeechStatus.textContent = "Buyer is listening...";
+      waveformBars.forEach(b => b.classList.remove("active"));
+      return;
+    }
     synth.cancel();
-    agentSpeechStatus.textContent = `${activePersona.name} is speaking...`;
+    const personaName = (activePersona && activePersona.name) ? activePersona.name : "Buyer";
+    agentSpeechStatus.textContent = `${personaName} is speaking...`;
     waveformBars.forEach(b => b.classList.add("active"));
 
-    const utter = new SpeechSynthesisUtterance(text);
+    const utter = new SpeechSynthesisUtterance(clean);
     utter.rate = 1.05;
-    utter.onend = () => {
+
+    const endSpeech = () => {
+      if (speechTimeout) {
+        clearTimeout(speechTimeout);
+        speechTimeout = null;
+      }
       agentSpeechStatus.textContent = "Buyer is listening...";
       waveformBars.forEach(b => b.classList.remove("active"));
     };
-    synth.speak(utter);
+
+    utter.onend = endSpeech;
+    utter.onerror = endSpeech;
+
+    const estimatedDurationMs = Math.max(2500, clean.split(" ").length * 500);
+    speechTimeout = setTimeout(endSpeech, estimatedDurationMs);
+
+    try {
+      synth.speak(utter);
+    } catch (_) {
+      endSpeech();
+    }
   }
 
   // Timer

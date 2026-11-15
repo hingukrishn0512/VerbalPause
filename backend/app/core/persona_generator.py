@@ -107,11 +107,16 @@ class PersonaGenerator:
     """Generates customized adversarial buyer personas from URL or prospect company research."""
 
     def __init__(self):
-        self.llm = ChatGroq(
-            model=settings.default_model,
-            temperature=0.4,
-            groq_api_key=settings.groq_api_key
-        )
+        llm_kwargs = {
+            "model": settings.default_model,
+            "temperature": 0.4,
+            "max_tokens": 2000,
+            "groq_api_key": settings.groq_api_key
+        }
+        try:
+            self.llm = ChatGroq(**llm_kwargs, reasoning_effort="low")
+        except Exception:
+            self.llm = ChatGroq(**llm_kwargs)
         self.search = TavilySearch(max_results=3, tavily_api_key=settings.tavily_api_key) if settings.tavily_api_key else None
 
     async def generate_from_url(

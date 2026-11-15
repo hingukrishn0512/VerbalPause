@@ -37,11 +37,16 @@ class LeverageAnalyzer:
     """Analyzes negotiation dynamics and pinpoints the exact seconds leverage was won or lost."""
 
     def __init__(self):
-        self.llm = ChatGroq(
-            model=settings.default_model,
-            temperature=0.2,
-            groq_api_key=settings.groq_api_key
-        )
+        llm_kwargs = {
+            "model": settings.default_model,
+            "temperature": 0.2,
+            "max_tokens": 2500,
+            "groq_api_key": settings.groq_api_key
+        }
+        try:
+            self.llm = ChatGroq(**llm_kwargs, reasoning_effort="low")
+        except Exception:
+            self.llm = ChatGroq(**llm_kwargs)
 
     async def analyze_call(
         self,
