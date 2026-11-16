@@ -42,12 +42,13 @@ if os.path.exists(static_dir):
 
 @app.get("/")
 def serve_index():
+    no_cache = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
     index_file = os.path.join(static_dir, "index.html")
     if os.path.exists(index_file):
-        return FileResponse(index_file)
+        return FileResponse(index_file, headers=no_cache)
     root_index = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "index.html")
     if os.path.exists(root_index):
-        return FileResponse(root_index)
+        return FileResponse(root_index, headers=no_cache)
     return {"message": "VerbalPause API is running. Open /docs for Swagger UI."}
 
 
