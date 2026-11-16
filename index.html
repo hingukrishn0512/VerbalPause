@@ -281,6 +281,25 @@
     color: #ffffff;
     box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
   }
+  .btn-stop-preview {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-stop-preview:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+  }
 
   /* Metric Ticker */
   .metrics-grid {
@@ -424,77 +443,94 @@
     font-weight: 600;
   }
 
-  /* Pricing Cards */
-  .pricing-grid {
-    max-width: 1040px;
+  /* Free Full Access Card */
+  .free-tier-container {
+    max-width: 860px;
     margin: 0 auto 80px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
     padding: 0 24px;
   }
-  .pricing-card {
+  .free-tier-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    padding: 36px;
     position: relative;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
   }
-  .pricing-card.featured {
-    border-color: #ffffff;
-    background: #14171e;
-    box-shadow: 0 0 0 1px #ffffff, 0 15px 30px rgba(0,0,0,0.5);
-  }
-  .pricing-badge {
-    position: absolute;
-    top: -11px;
-    right: 24px;
-    background: #ffffff;
-    color: #000000;
+  .free-badge {
+    display: inline-block;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #4ade80;
     font-size: 11px;
-    font-weight: 800;
-    padding: 2px 10px;
+    font-weight: 700;
+    padding: 4px 12px;
     border-radius: 20px;
-    letter-spacing: 0.05em;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
   }
-  .pricing-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-  .pricing-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
-  .pricing-card .price { font-size: 36px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 20px; }
-  .pricing-card .price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
-  .pricing-features {
-    list-style: none;
-    margin-bottom: 24px;
+  .free-card-header {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 13px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .free-card-header h3 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .free-card-header p {
+    font-size: 14px;
     color: var(--text-secondary);
   }
-  .pricing-features li::before {
-    content: "✓";
-    color: #10b981;
+  .free-card-header .price {
+    font-size: 40px;
     font-weight: 900;
-    margin-right: 8px;
+    color: var(--text-primary);
+    text-align: right;
   }
-  .pricing-card .btn-tier {
-    margin-top: auto;
-    width: 100%;
-    padding: 11px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    border: none;
-    transition: all 0.15s;
+  .free-card-header .price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
   }
-  .btn-tier.primary { background: #ffffff; color: #000000; }
-  .btn-tier.primary:hover { background: #e2e8f0; }
-  .btn-tier.secondary { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border); }
-  .btn-tier.secondary:hover { background: var(--bg-hover); }
+  .free-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 24px;
+  }
+  .free-feat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .feat-check {
+    color: #22c55e;
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .free-feat-item strong {
+    display: block;
+    font-size: 13.5px;
+    color: var(--text-primary);
+  }
+  .free-feat-item span {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  @media (max-width: 640px) {
+    .free-features-grid { grid-template-columns: 1fr; }
+    .free-card-header { flex-direction: column; gap: 16px; }
+  }
 
   /* Landing Footer */
   footer {
@@ -1113,18 +1149,17 @@
     <div class="nav-public-links" id="nav-public-links">
       <a class="nav-link" id="nav-link-features" href="#section-features">Features</a>
       <a class="nav-link" id="nav-link-why" href="#section-why">Why We Win</a>
-      <a class="nav-link" id="nav-link-pricing" href="#section-pricing">Pricing</a>
+      <a class="nav-link" id="nav-link-pricing" href="#section-pricing">Free Access</a>
     </div>
-    <a class="nav-link" id="nav-link-arena" style="cursor:pointer;">Arena</a>
   </nav>
 
   <div class="header-actions">
-    <button class="btn-ghost" id="nav-api-config" title="Configure Backend API URL">⚙️ API URL</button>
     <div id="auth-unauthed" style="display:flex; gap:8px;">
       <button class="btn-ghost" id="btn-open-login">Sign In</button>
       <button class="btn-primary" id="btn-open-register">Get Started</button>
     </div>
     <div id="auth-authed" style="display:none; align-items:center; gap:10px;">
+      <button class="btn-ghost" id="btn-nav-arena" style="color:var(--text-primary); font-weight:600;">⚔️ Arena</button>
       <span class="streak-badge" id="nav-streak-badge">🔥 0-Day Streak</span>
       <button class="btn-ghost" id="btn-nav-dashboard">Dashboard</button>
       <button class="btn-ghost" id="btn-nav-logout" title="Sign Out">Sign Out</button>
@@ -1155,7 +1190,10 @@
           <h4>Hear the Adversarial Interruption Engine</h4>
           <p>Marcus Vance (VP of Eng) cutting off an account executive's monologue.</p>
         </div>
-        <button class="btn-play-preview" id="btn-play-preview">🔊 Play 10s Demo</button>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="btn-play-preview" id="btn-play-preview">🔊 Play 10s Demo</button>
+          <button class="btn-stop-preview" id="btn-stop-preview">⏹ Stop Demo</button>
+        </div>
       </div>
     </div>
 
@@ -1264,53 +1302,63 @@
       </div>
     </section>
 
-    <!-- Pricing Section -->
+    <!-- Pricing Section: 100% Free Full Access -->
     <section class="comparison-section" id="section-pricing">
       <div class="section-title">
-        <h2>Transparent, Self-Serve Pricing</h2>
-        <p>Start free. Upgrade as you scale your team.</p>
+        <h2>100% Free Forever. Zero Paywalls.</h2>
+        <p>Enterprise-grade adversarial voice simulation available to every SDR, AE, and founder at zero cost.</p>
       </div>
 
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Pioneer</h3>
-          <p>For solo SDRs & founders getting started.</p>
-          <div class="price">$0 <span>/ forever</span></div>
-          <ul class="pricing-features">
-            <li>Unlimited Preset Personas</li>
-            <li>Real-time Interruption State Machine</li>
-            <li>Basic Post-Call Scorecard</li>
-            <li>Web Speech STT/TTS</li>
-          </ul>
-          <button class="btn-tier secondary" id="btn-tier-free">Start Free Arena</button>
-        </div>
+      <div class="free-tier-container">
+        <div class="free-tier-card">
+          <div class="free-badge">🎉 100% FREE ACCESS — ALL FEATURES UNLOCKED</div>
+          <div class="free-card-header">
+            <div>
+              <h3>Full Simulation Arena</h3>
+              <p>Everything included. No credit card required. Unlimited practice sessions.</p>
+            </div>
+            <div class="price">$0 <span>/ forever</span></div>
+          </div>
+          
+          <div class="free-features-grid">
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>Adversarial Interruption State Machine</strong><span>Real-time buyer interruptions, patience decay, and skepticism tracking</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>All Preset Buyer Personas</strong><span>Marcus Vance (VP Eng), Elena Rostova (CFO), David Sterling (Sales Ops)</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>30-Sec Web Persona Synthesizer</strong><span>Tavily deep research for any target domain & customized buyer objection</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>Deal Leverage & Moment-by-Moment Scorecard</strong><span>Peak leverage detection, fatal objection dropoffs, and talk-to-listen ratios</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>1-Click Rewind & Re-Pitch Sandbox</strong><span>Instant retry environment to rewrite and test better objection responses</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>LeetCode-Style Practice Streaks</strong><span>Daily practice streak tracking with zero false inflation on simple logins</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>Personal Performance Analytics</strong><span>Historical session log, deal win rate, and automated AI weakness diagnostics</span></div>
+            </div>
+            <div class="free-feat-item">
+              <span class="feat-check">✓</span>
+              <div><strong>Ultra-Low Voice Latency</strong><span>Powered by Groq LPUs (llama-3.3-70b / gpt-oss-120b) + Web Speech API</span></div>
+            </div>
+          </div>
 
-        <div class="pricing-card featured">
-          <div class="pricing-badge">Most Popular</div>
-          <h3>Pro Closer</h3>
-          <p>For account executives mastering enterprise deals.</p>
-          <div class="price">$49 <span>/ month</span></div>
-          <ul class="pricing-features">
-            <li>Everything in Pioneer</li>
-            <li>30-Second Instant Web Persona Synthesizer</li>
-            <li>1-Click Rewind & Re-Pitch Sandbox</li>
-            <li>Full Practice Streak & Performance History</li>
-            <li>AI Diagnostic: Top Weakness Analysis</li>
-          </ul>
-          <button class="btn-tier primary" id="btn-tier-pro">Get Pro Closer</button>
-        </div>
-
-        <div class="pricing-card">
-          <h3>Dealmaker Team</h3>
-          <p>For sales leaders coaching revenue teams.</p>
-          <div class="price">$199 <span>/ month</span></div>
-          <ul class="pricing-features">
-            <li>5 AE Seats included</li>
-            <li>Custom Objection & Outage Injection</li>
-            <li>Team Analytics Leaderboard</li>
-            <li>Gong & Salesforce CRM Sync</li>
-          </ul>
-          <button class="btn-tier secondary" id="btn-tier-team">Contact Sales</button>
+          <div style="margin-top: 32px; text-align: center;">
+            <button class="btn-hero-primary" id="btn-tier-free" style="padding: 14px 36px; font-size: 15px; width: 100%; max-width: 440px;">⚔️ Enter Voice Arena Free &rarr;</button>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">No credit card • Free instant candidate account • Unlimited simulations</div>
+          </div>
         </div>
       </div>
     </section>
@@ -1621,9 +1669,8 @@
   const navLinkFeatures = document.getElementById("nav-link-features");
   const navLinkWhy = document.getElementById("nav-link-why");
   const navLinkPricing = document.getElementById("nav-link-pricing");
-  const navLinkArena = document.getElementById("nav-link-arena");
 
-  const navApiConfig = document.getElementById("nav-api-config");
+  const btnNavArena = document.getElementById("btn-nav-arena");
   const authUnauthed = document.getElementById("auth-unauthed");
   const authAuthed = document.getElementById("auth-authed");
   const navStreakBadge = document.getElementById("nav-streak-badge");
@@ -1635,10 +1682,10 @@
   const btnHeroArena = document.getElementById("btn-hero-arena");
   const btnHeroLogin = document.getElementById("btn-hero-login");
   const btnPlayPreview = document.getElementById("btn-play-preview");
+  const btnStopPreview = document.getElementById("btn-stop-preview");
 
   const btnTierFree = document.getElementById("btn-tier-free");
-  const btnTierPro = document.getElementById("btn-tier-pro");
-  const btnTierTeam = document.getElementById("btn-tier-team");
+  let postAuthRedirect = null; // "persona" | "dashboard" | null
 
   const modalAuth = document.getElementById("modal-auth");
   const tabLogin = document.getElementById("tab-login");
@@ -2170,7 +2217,7 @@
       tabRegister.classList.add("active");
       tabLogin.classList.remove("active");
       fieldFullname.style.display = "flex";
-      btnAuthSubmit.textContent = "Create Account";
+      btnAuthSubmit.textContent = postAuthRedirect === "persona" ? "Create Account & Enter Arena →" : "Create Account";
     }
   }
 
@@ -2180,9 +2227,18 @@
 
   tabLogin.addEventListener("click", () => openAuth("login"));
   tabRegister.addEventListener("click", () => openAuth("register"));
-  btnOpenLogin.addEventListener("click", () => openAuth("login"));
-  btnOpenRegister.addEventListener("click", () => openAuth("register"));
-  btnHeroLogin.addEventListener("click", () => openAuth("register"));
+  btnOpenLogin.addEventListener("click", () => {
+    postAuthRedirect = "dashboard";
+    openAuth("login");
+  });
+  btnOpenRegister.addEventListener("click", () => {
+    postAuthRedirect = "dashboard";
+    openAuth("register");
+  });
+  btnHeroLogin.addEventListener("click", () => {
+    postAuthRedirect = "dashboard";
+    openAuth("register");
+  });
   btnCloseAuth.addEventListener("click", closeAuth);
 
   formAuth.addEventListener("submit", async (e) => {
@@ -2216,7 +2272,12 @@
 
       closeAuth();
       updateAuthUI(currentUser);
-      showView("dashboard");
+      if (postAuthRedirect === "persona") {
+        postAuthRedirect = null;
+        showView("persona");
+      } else {
+        showView("dashboard");
+      }
     } catch (err) {
       authErrorMsg.textContent = err.message;
       authErrorMsg.style.display = "block";
@@ -2256,16 +2317,22 @@
     const el = document.getElementById("section-pricing");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   });
-  navLinkArena.addEventListener("click", () => showView("persona"));
-  btnHeroArena.addEventListener("click", () => showView("persona"));
-  btnTierFree.addEventListener("click", () => showView("persona"));
-  btnTierPro.addEventListener("click", () => {
-    if (authToken) showView("persona");
-    else openAuth("register");
-  });
-  btnTierTeam.addEventListener("click", () => {
-    window.location.href = "mailto:sales@verbalpause.com?subject=VerbalPause Enterprise Dealmaker Inquiry";
-  });
+
+  // Arena Entry Flow (Prompts auth first, then routes user to Arena)
+  function enterArenaWithAuth() {
+    if (authToken) {
+      showView("persona");
+    } else {
+      postAuthRedirect = "persona";
+      openAuth("register");
+    }
+  }
+
+  btnHeroArena.addEventListener("click", enterArenaWithAuth);
+  btnTierFree.addEventListener("click", enterArenaWithAuth);
+  if (btnNavArena) {
+    btnNavArena.addEventListener("click", () => showView("persona"));
+  }
 
   btnNavDashboard.addEventListener("click", () => {
     if (authToken) showView("dashboard");
@@ -2282,45 +2349,53 @@
     else showView("landing");
   });
 
-  // Audio Demo Preview
+  // Audio Demo Preview with Stop Button
+  let previewSafetyTimer = null;
+
+  function stopAudioDemo() {
+    if (previewSafetyTimer) {
+      clearTimeout(previewSafetyTimer);
+      previewSafetyTimer = null;
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    btnPlayPreview.textContent = "🔊 Play 10s Demo";
+    btnPlayPreview.classList.remove("playing");
+    btnPlayPreview.style.display = "inline-flex";
+    btnStopPreview.style.display = "none";
+  }
+
   btnPlayPreview.addEventListener("click", () => {
     const previewText = "Sorry to cut in, but I have a hard stop in 3 minutes. What is the actual bottom-line ROI here?";
-    btnPlayPreview.textContent = "🔊 Playing Demo...";
-    btnPlayPreview.classList.add("playing");
     if (!window.speechSynthesis) {
       alert("Browser Speech Synthesis is not supported in this browser.");
-      btnPlayPreview.textContent = "🔊 Play 10s Demo";
-      btnPlayPreview.classList.remove("playing");
       return;
     }
     window.speechSynthesis.cancel();
+    btnPlayPreview.textContent = "🔊 Playing Demo...";
+    btnPlayPreview.classList.add("playing");
+    btnStopPreview.style.display = "inline-flex";
+
     const utter = new SpeechSynthesisUtterance(previewText);
     utter.rate = 1.05;
     utter.pitch = 0.95;
-    const resetPreview = () => {
-      btnPlayPreview.textContent = "🔊 Play 10s Demo";
-      btnPlayPreview.classList.remove("playing");
-    };
-    utter.onend = resetPreview;
-    utter.onerror = resetPreview;
+    utter.onend = stopAudioDemo;
+    utter.onerror = stopAudioDemo;
     window.speechSynthesis.speak(utter);
-    setTimeout(resetPreview, 8000);
+    previewSafetyTimer = setTimeout(stopAudioDemo, 8000);
   });
 
-  // API Config
-  navApiConfig.addEventListener("click", () => {
-    const next = prompt(
-      "Enter Backend API URL (e.g. https://verbalpause-backend.onrender.com):\nLeave empty for same-origin / relative /api:",
-      apiBase
-    );
-    if (next !== null) {
-      apiBase = next.trim().replace(/\/+$/, "");
-      if (apiBase) localStorage.setItem("verbalpause_api_url", apiBase);
-      else localStorage.removeItem("verbalpause_api_url");
-      alert("Backend API configured: " + (apiBase || "Same-origin / relative"));
-      loadPresets();
-    }
-  });
+  btnStopPreview.addEventListener("click", stopAudioDemo);
+
+  // API URL can be configured programmatically or via localStorage: localStorage.setItem("verbalpause_api_url", "https://...")
+  window.setApiUrl = (url) => {
+    apiBase = (url || "").trim().replace(/\/+$/, "");
+    if (apiBase) localStorage.setItem("verbalpause_api_url", apiBase);
+    else localStorage.removeItem("verbalpause_api_url");
+    console.log("Backend API configured:", apiBase || "Same-origin / relative");
+    loadPresets();
+  };
 
   function escapeHtml(str) {
     if (!str) return "";
