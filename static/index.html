@@ -167,69 +167,66 @@
   /* =========================================================
      VIEW 0: PUBLIC MARKETING LANDING PAGE
      ========================================================= */
+  /* =========================================================
+     PAGE 1: HERO SECTION (MATCHING USER IMAGE 1)
+     ========================================================= */
   .landing-hero {
-    padding: 72px 24px 56px;
-    max-width: 1040px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .hero-pill {
-    display: inline-flex;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
+    text-align: center;
+    padding: 72px 24px 48px;
+    max-width: 960px;
+    margin: 0 auto;
   }
-  .hero-pill span { color: #3b82f6; }
   .landing-hero h1 {
-    font-size: 52px;
+    font-size: 58px;
     font-weight: 900;
     letter-spacing: -0.04em;
-    line-height: 1.08;
-    margin-bottom: 20px;
-    background: linear-gradient(180deg, #ffffff 0%, #a5abb8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    color: #ffffff;
   }
   .landing-hero p {
-    font-size: 17px;
-    color: var(--text-secondary);
+    font-size: 17.5px;
+    color: #9ca3af;
     line-height: 1.6;
-    max-width: 700px;
+    max-width: 720px;
     margin: 0 auto 36px;
   }
   .hero-ctas {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-bottom: 48px;
+    gap: 16px;
   }
   .btn-hero-primary {
     background: #ffffff;
-    color: #000000;
-    padding: 13px 28px;
-    font-size: 15px;
+    color: #0b0d13;
+    padding: 14px 38px;
+    font-size: 15.5px;
     font-weight: 700;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     border: none;
-    transition: all 0.15s;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
   .btn-hero-primary:hover {
-    background: #e2e8f0;
+    background: #f1f5f9;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+  }
+  @media (max-width: 768px) {
+    .landing-hero h1 { font-size: 38px; }
+    .landing-hero p { font-size: 15px; }
+    .landing-hero { min-height: auto; padding: 60px 20px; }
   }
   .btn-hero-secondary {
     background: var(--bg-card);
@@ -342,139 +339,311 @@
     flex: 1;
   }
 
-  /* Core Features Section */
-  .features-section {
-    max-width: 1040px;
-    margin: 40px auto 60px;
+  /* =========================================================
+     PAGE 2: MODEL FEATURES SHOWCASE (MATCHING USER IMAGE 2)
+     ========================================================= */
+  .model-showcase-section {
+    max-width: 1200px;
+    margin: 40px auto 90px;
     padding: 0 24px;
   }
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  .model-showcase-header {
+    text-align: left;
+    margin-bottom: 40px;
   }
-  @media (max-width: 900px) {
-    .features-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 600px) {
-    .features-grid { grid-template-columns: 1fr; }
-  }
-  .feature-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-  }
-  .feature-card:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-    transform: translateY(-2px);
-  }
-  .feature-card-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
-  }
-  .feature-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-  }
-  .feature-card p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    flex: 1;
-  }
-  .feature-card .feature-tag {
-    display: inline-block;
-    margin-top: 16px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #60a5fa;
-  }
-
-  /* Section Titles */
-  .section-title {
-    text-align: center;
-    margin-bottom: 36px;
-  }
-  .section-title h2 {
+  .model-showcase-header h2 {
     font-size: 32px;
     font-weight: 800;
     letter-spacing: -0.03em;
+    color: #ffffff;
     margin-bottom: 8px;
   }
-  .section-title p {
+  .model-showcase-header p {
     font-size: 15px;
     color: var(--text-secondary);
+    max-width: 680px;
   }
 
-  /* Architecture & Pipeline */
-  .arch-pipeline-container {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px 24px;
-    margin-bottom: 32px;
-  }
-  .arch-pipeline-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .arch-pipeline-header h3 {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text-primary);
-  }
-  .arch-pipeline-header p {
-    font-size: 13.5px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-  }
-  .arch-flow {
+  .model-showcase-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
   }
-  .arch-node {
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 16px;
-    text-align: center;
-    transition: all 0.2s;
+  @media (max-width: 1024px) {
+    .model-showcase-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
   }
-  .arch-node:hover {
-    border-color: rgba(59, 130, 246, 0.4);
+
+  .model-showcase-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .model-showcase-meta {
+    margin-bottom: 20px;
+  }
+  .model-showcase-meta h3 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  .model-showcase-meta p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #9ca3af;
+    margin-bottom: 12px;
+    min-height: 42px;
+  }
+  .model-showcase-meta .feature-arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #a855f7;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .model-showcase-meta .feature-arrow-link:hover {
+    color: #c084fc;
+    transform: translateX(3px);
+  }
+
+  /* Soft Tinted Card Container (Matching Image 2 Lavender/Violet Box) */
+  .mockup-container {
+    background: linear-gradient(180deg, rgba(168, 85, 247, 0.08) 0%, rgba(139, 92, 246, 0.03) 100%);
+    border: 1px solid rgba(168, 85, 247, 0.18);
+    border-radius: 20px;
+    padding: 22px;
+    min-height: 310px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease;
+  }
+  .mockup-container:hover {
+    border-color: rgba(168, 85, 247, 0.35);
     transform: translateY(-2px);
   }
-  .arch-node-badge {
-    display: inline-block;
+
+  /* Mockup Inner Card Styles */
+  .mockup-white-card {
+    background: #11141c;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+  .mockup-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Column 1: List with Tags (Matching Image 2 Col 1) */
+  .mockup-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mockup-list-row {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mockup-circle-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+  .avatar-mv { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+  .avatar-er { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+  .avatar-ds { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+
+  .mockup-row-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .mockup-row-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #f3f4f6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mockup-row-sub {
+    font-size: 10px;
+    color: #9ca3af;
+  }
+  .mockup-pill-badge {
     font-size: 10px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: rgba(59, 130, 246, 0.15);
-    color: #60a5fa;
     padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-match-green {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #4ade80;
+  }
+  .badge-match-amber {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+  }
+  .badge-match-red {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
+  }
+
+  /* Column 2: Stacked Floating Cards (Matching Image 2 Col 2) */
+  .mockup-stack-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mockup-floating-card {
+    background: #11141c;
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+  .mockup-floating-icon {
+    font-size: 17px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .mockup-floating-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .mockup-floating-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .mockup-floating-sub {
+    font-size: 10.5px;
+    color: #9ca3af;
+  }
+  .badge-status-blue {
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+  }
+  .badge-status-purple {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    color: #c084fc;
+  }
+
+  /* Column 3: Profile Generating Card (Matching Image 2 Col 3) */
+  .mockup-profile-card {
+    background: #11141c;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 16px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+  .mockup-top-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #7c3aed;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  }
+  .mockup-profile-name {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+  .mockup-profile-title {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-bottom: 3px;
+  }
+  .mockup-profile-meta {
+    font-size: 10px;
+    color: #6b7280;
     margin-bottom: 10px;
   }
-  .arch-node-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 6px;
+  .mockup-skeleton-section {
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 8px;
   }
-  .arch-node-desc {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.4;
+  .mockup-section-heading {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #d1d5db;
+    margin-bottom: 5px;
+  }
+  .mockup-chips-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .mockup-chip-item {
+    font-size: 9.5px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+  .mockup-obstacle-box {
+    font-size: 10px;
+    color: #9ca3af;
+    line-height: 1.35;
+    background: rgba(0, 0, 0, 0.25);
+    border-left: 2px solid #ef4444;
+    padding: 5px 8px;
+    border-radius: 4px;
+    margin-top: 3px;
   }
 
   /* Communication Development & Impact Statistics */
@@ -1334,31 +1503,23 @@
        VIEW 0: PUBLIC MARKETING LANDING PAGE
        ========================================================= -->
   <section class="panel-view" id="view-landing" style="display:flex;">
+    <!-- =========================================================
+         PAGE 1: HERO VIEW (MATCHING USER IMAGE 1)
+         ========================================================= -->
     <div class="landing-hero">
-      <div class="hero-pill">
-        <span>⚡ TIER-1 AI VOICE ARENA</span> — Adversarial B2B Sales Simulation
-      </div>
       <h1>Real Buyers Don't Wait Patiently.<br>Stop Pitching Polite Bots.</h1>
       <p>The adversarial sales & negotiation simulator that actively interrupts your monologues, punishes generic marketing fluff, and scores deal leverage in real time.</p>
       
-      <div class="hero-ctas" style="justify-content: center;">
-        <button class="btn-hero-primary" id="btn-hero-arena" style="padding: 14px 38px; font-size: 15px;">⚔️ Enter Voice Arena Free &rarr;</button>
-      </div>
-
-      <!-- Live Audio Interruption Preview -->
-      <div class="audio-preview-box">
-        <div class="audio-preview-info">
-          <h4>Hear the Adversarial Interruption Engine</h4>
-          <p>Marcus Vance (VP of Eng) cutting off an account executive's monologue.</p>
-        </div>
-        <div style="display:flex; gap:8px; align-items:center;">
+      <div class="hero-ctas">
+        <button class="btn-hero-primary" id="btn-hero-arena">⚔️ Enter Voice Arena Free &rarr;</button>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
           <button class="btn-play-preview" id="btn-play-preview">🔊 Play 10s Demo</button>
           <button class="btn-stop-preview" id="btn-stop-preview">⏹ Stop Demo</button>
         </div>
       </div>
     </div>
 
-    <!-- Metric Ticker -->
+    <!-- Metric Ticker (Grounded Benchmarks) -->
     <div class="metrics-grid">
       <div class="metric-card">
         <div class="num">+34%</div>
@@ -1383,70 +1544,120 @@
     </div>
 
     <!-- =========================================================
-         SECTION 1: FEATURES & HOW IT WORKS
+         PAGE 2: MODEL FEATURES SHOWCASE (MATCHING USER IMAGE 2)
          ========================================================= -->
-    <section class="features-section" id="section-features">
-      <div class="section-title">
-        <h2>Adversarial Voice AI Platform</h2>
-        <p>Built on ultra-low latency Groq LPUs with a live psychological state machine to train real sales reflexes.</p>
+    <section class="model-showcase-section" id="section-features">
+      <div class="model-showcase-header">
+        <span class="badge-tag">Platform &amp; Model Architecture</span>
+        <h2>How the Adversarial AI Engine Works</h2>
+        <p>Ultra-low latency Groq LPUs paired with cognitive emotion tracking to train instinctive sales reflexes.</p>
       </div>
 
-      <!-- 3-Step Simple Flow -->
-      <div class="simple-flow-grid">
-        <div class="flow-step">
-          <div class="flow-num">1</div>
-          <h4>Pick or Synthesize</h4>
-          <p>Choose ruthless presets like Marcus Vance or generate any custom buyer from a company URL in 30 seconds.</p>
+      <div class="model-showcase-grid">
+        <!-- Column 1: Autonomous Interruption Engine (Image 2 Col 1 style) -->
+        <div class="model-showcase-col">
+          <div class="model-showcase-meta">
+            <h3>Autonomous Interruption Engine</h3>
+            <p>Monologue analysis cuts you off if you ramble for &gt;15s or lean on generic marketing buzzwords without ROI proof.</p>
+            <a class="feature-arrow-link" id="link-play-demo-col" href="#">Hear 10-second demo cut-off &rarr;</a>
+          </div>
+          <div class="mockup-container">
+            <div class="mockup-white-card">
+              <div class="mockup-card-title">Live Interruption Detection</div>
+              <div class="mockup-list">
+                <div class="mockup-list-row">
+                  <div class="mockup-circle-avatar avatar-mv">MV</div>
+                  <div class="mockup-row-content">
+                    <div class="mockup-row-title">Marcus Vance • VP Eng</div>
+                    <div class="mockup-row-sub">Monologue detected: 14s</div>
+                  </div>
+                  <div class="mockup-pill-badge badge-match-red">Cut Off (98%)</div>
+                </div>
+                <div class="mockup-list-row">
+                  <div class="mockup-circle-avatar avatar-er">ER</div>
+                  <div class="mockup-row-content">
+                    <div class="mockup-row-title">Elena Rostova • CFO</div>
+                    <div class="mockup-row-sub">Vague ROI / Buzzwords</div>
+                  </div>
+                  <div class="mockup-pill-badge badge-match-amber">Patience -45%</div>
+                </div>
+                <div class="mockup-list-row">
+                  <div class="mockup-circle-avatar avatar-ds">DS</div>
+                  <div class="mockup-row-content">
+                    <div class="mockup-row-title">David Sterling • Growth</div>
+                    <div class="mockup-row-sub">Discovery Inquiry</div>
+                  </div>
+                  <div class="mockup-pill-badge badge-match-green">Engaged (88%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="flow-step">
-          <div class="flow-num">2</div>
-          <h4>Speak & Face Resistance</h4>
-          <p>Speak naturally over voice. The AI actively cuts you off if you ramble for &gt;15s or lean on marketing buzzwords.</p>
-        </div>
-        <div class="flow-step">
-          <div class="flow-num">3</div>
-          <h4>Rewind & Master Objections</h4>
-          <p>Inspect moment-by-moment deal leverage drop-offs and re-test weak objection responses in the instant sandbox.</p>
-        </div>
-      </div>
 
-      <!-- Core Capabilities Grid (6 Cards) -->
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-card-icon">⚡</div>
-          <h3>Autonomous Interruption Engine</h3>
-          <p>Ramble past 15 seconds or drop fluffy buzzwords, and the buyer cuts in immediately to demand real value.</p>
-          <span class="feature-tag">Groq LPU • &lt;600ms Voice</span>
+        <!-- Column 2: Deal Leverage State Machine (Image 2 Col 2 style) -->
+        <div class="model-showcase-col">
+          <div class="model-showcase-meta">
+            <h3>Deal Leverage State Machine</h3>
+            <p>Dynamic tri-vector state machine tracking buyer patience, skepticism, and negotiation leverage on sub-600ms Groq LPUs.</p>
+            <a class="feature-arrow-link" href="#section-impact">View communication metrics &rarr;</a>
+          </div>
+          <div class="mockup-container">
+            <div class="mockup-stack-wrap">
+              <div class="mockup-floating-card">
+                <div class="mockup-floating-icon">⚡</div>
+                <div class="mockup-floating-content">
+                  <div class="mockup-floating-title">Groq LPU Voice Inference</div>
+                  <div class="mockup-floating-sub">&lt;600ms Round-Trip Response</div>
+                </div>
+                <div class="mockup-pill-badge badge-match-green">Sub-Second</div>
+              </div>
+              <div class="mockup-floating-card">
+                <div class="mockup-floating-icon">📊</div>
+                <div class="mockup-floating-content">
+                  <div class="mockup-floating-title">Buyer Skepticism: 85%</div>
+                  <div class="mockup-floating-sub">Spikes on jargon &amp; vagueness</div>
+                </div>
+                <div class="mockup-pill-badge badge-match-red">Critical Alert</div>
+              </div>
+              <div class="mockup-floating-card">
+                <div class="mockup-floating-icon">🎯</div>
+                <div class="mockup-floating-content">
+                  <div class="mockup-floating-title">Deal Leverage Score: +18</div>
+                  <div class="mockup-floating-sub">Momentum boosted by proof</div>
+                </div>
+                <div class="mockup-pill-badge badge-status-blue">Peak Leverage</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">🌐</div>
-          <h3>30-Sec Web Persona Synthesizer</h3>
-          <p>Input any company domain and role. Our agent scrapes 10-K filings, tech stacks, and procurement priorities.</p>
-          <span class="feature-tag">Tavily Deep Search API</span>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">📊</div>
-          <h3>Deal Leverage State Machine</h3>
-          <p>Live tri-vector telemetry tracks buyer patience, skepticism, and negotiation leverage with every sentence.</p>
-          <span class="feature-tag">Real-Time State Machine</span>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">🔄</div>
-          <h3>1-Click Rewind Sandbox</h3>
-          <p>Don't just review errors—fix them. Re-enter the exact objection that killed the deal and test better responses.</p>
-          <span class="feature-tag">Targeted Objection Retry</span>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">🔥</div>
-          <h3>Daily Practice Streaks</h3>
-          <p>LeetCode-style daily streak system that builds muscle memory and only counts when you complete real calls.</p>
-          <span class="feature-tag">Verified Skill Building</span>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">🎯</div>
-          <h3>Personal AI Diagnostics</h3>
-          <p>Instant post-call coaching identifying your fatal drop-off point, peak quote, and talk-to-listen ratio.</p>
-          <span class="feature-tag">Executive Scorecard</span>
+
+        <!-- Column 3: 30-Sec Web Persona Synthesizer (Image 2 Col 3 style) -->
+        <div class="model-showcase-col">
+          <div class="model-showcase-meta">
+            <h3>30-Sec Web Persona Synthesizer</h3>
+            <p>Input any company URL and buyer role. Our agent crawls real 10-K filings, tech stacks, and procurement obstacles via Tavily.</p>
+            <a class="feature-arrow-link" id="link-synth-col" href="#view-persona">Synthesize custom prospect &rarr;</a>
+          </div>
+          <div class="mockup-container">
+            <div class="mockup-profile-card">
+              <div class="mockup-top-badge">🪄 Synthesized from Web</div>
+              <div class="mockup-profile-name">Marcus Vance</div>
+              <div class="mockup-profile-title">VP of Engineering @ Apex Cloud</div>
+              <div class="mockup-profile-meta">Domain: apexcloud.io • Brutal Difficulty</div>
+              <div class="mockup-skeleton-section">
+                <div class="mockup-section-heading">Scraped Tech Stack</div>
+                <div class="mockup-chips-row">
+                  <span class="mockup-chip-item">Kubernetes</span>
+                  <span class="mockup-chip-item">Go</span>
+                  <span class="mockup-chip-item">GitHub Actions</span>
+                </div>
+              </div>
+              <div class="mockup-skeleton-section">
+                <div class="mockup-section-heading">Primary Executive Obstacle</div>
+                <div class="mockup-obstacle-box">"Why can't my internal infra team build this in two weeks? Cutting spend by 20%."</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2483,6 +2694,20 @@
 
   btnHeroArena.addEventListener("click", enterArenaWithAuth);
   btnTierFree.addEventListener("click", enterArenaWithAuth);
+  const linkPlayDemoCol = document.getElementById("link-play-demo-col");
+  if (linkPlayDemoCol) {
+    linkPlayDemoCol.addEventListener("click", (e) => {
+      e.preventDefault();
+      btnPlayPreview.click();
+    });
+  }
+  const linkSynthCol = document.getElementById("link-synth-col");
+  if (linkSynthCol) {
+    linkSynthCol.addEventListener("click", (e) => {
+      e.preventDefault();
+      enterArenaWithAuth();
+    });
+  }
   if (btnNavArena) {
     btnNavArena.addEventListener("click", () => showView("persona"));
   }
