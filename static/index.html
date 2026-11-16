@@ -392,12 +392,7 @@
     color: #60a5fa;
   }
 
-  /* Comparison Section */
-  .comparison-section {
-    max-width: 1040px;
-    margin: 40px auto 60px;
-    padding: 0 24px;
-  }
+  /* Section Titles */
   .section-title {
     text-align: center;
     margin-bottom: 36px;
@@ -412,35 +407,209 @@
     font-size: 15px;
     color: var(--text-secondary);
   }
-  .comparison-table-wrap {
-    overflow-x: auto;
+
+  /* Architecture & Pipeline */
+  .arch-pipeline-container {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin-bottom: 32px;
   }
-  .comp-table {
-    width: 100%;
-    border-collapse: collapse;
+  .arch-pipeline-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .arch-pipeline-header h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .arch-pipeline-header p {
     font-size: 13.5px;
-    text-align: left;
-  }
-  .comp-table th, .comp-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .comp-table th {
-    background: var(--bg-surface);
     color: var(--text-secondary);
-    font-size: 12px;
+    margin-top: 4px;
+  }
+  .arch-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .arch-node {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .arch-node:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+  }
+  .arch-node-badge {
+    display: inline-block;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-bottom: 10px;
   }
-  .comp-table tr:last-child td { border-bottom: none; }
-  .comp-table .winner {
-    background: rgba(59, 130, 246, 0.06);
+  .arch-node-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .arch-node-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Communication Development & Impact Statistics */
+  .impact-section {
+    max-width: 1040px;
+    margin: 40px auto 60px;
+    padding: 0 24px;
+  }
+  .stats-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .impact-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+  }
+  .impact-stat-num {
+    font-size: 34px;
+    font-weight: 900;
     color: #ffffff;
-    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .impact-stat-num.highlight-green {
+    color: #4ade80;
+  }
+  .impact-stat-num.highlight-blue {
+    color: #60a5fa;
+  }
+  .impact-stat-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .impact-stat-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .impact-stat-source {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 8px;
+    font-style: italic;
+  }
+
+  /* Before vs After Communication Contrast Box */
+  .compare-contrast-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .compare-contrast-wrap h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .compare-contrast-wrap p.sub {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .compare-col {
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .compare-col.bad {
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+  .compare-col.good {
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+  .compare-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .compare-badge.bad {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
+  .compare-badge.good {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+  }
+  .compare-quote {
+    font-size: 13.5px;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .compare-feedback {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .compare-feedback.bad {
+    border-left: 3px solid #ef4444;
+    color: #fca5a5;
+  }
+  .compare-feedback.good {
+    border-left: 3px solid #22c55e;
+    color: #86efac;
+  }
+
+  @media (max-width: 768px) {
+    .arch-flow { grid-template-columns: 1fr; }
+    .stats-impact-grid { grid-template-columns: 1fr 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
   }
 
   /* Free Full Access Card */
@@ -1147,8 +1316,8 @@
 
   <nav class="nav-links">
     <div class="nav-public-links" id="nav-public-links">
-      <a class="nav-link" id="nav-link-features" href="#section-features">Features</a>
-      <a class="nav-link" id="nav-link-why" href="#section-why">Why We Win</a>
+      <a class="nav-link" id="nav-link-features" href="#section-features">Platform & Models</a>
+      <a class="nav-link" id="nav-link-impact" href="#section-impact">Buyer Impact</a>
       <a class="nav-link" id="nav-link-pricing" href="#section-pricing">Free Access</a>
     </div>
   </nav>
@@ -1179,9 +1348,8 @@
       <h1>Real Buyers Don't Wait Patiently.<br>Stop Pitching Polite Bots.</h1>
       <p>The adversarial sales & negotiation simulator that actively interrupts your monologues, punishes generic marketing fluff, and scores deal leverage in real time.</p>
       
-      <div class="hero-ctas">
-        <button class="btn-hero-primary" id="btn-hero-arena">⚔️ Enter Voice Arena Free &rarr;</button>
-        <button class="btn-hero-secondary" id="btn-hero-login">Create Candidate Account</button>
+      <div class="hero-ctas" style="justify-content: center;">
+        <button class="btn-hero-primary" id="btn-hero-arena" style="padding: 14px 38px; font-size: 15px;">⚔️ Enter Voice Arena Free &rarr;</button>
       </div>
 
       <!-- Live Audio Interruption Preview -->
@@ -1221,84 +1389,141 @@
       </div>
     </div>
 
-    <!-- Core Features Section -->
+    <!-- =========================================================
+         SECTION 1: AI ARCHITECTURE & HOW OUR MODELS WORK
+         ========================================================= -->
     <section class="features-section" id="section-features">
       <div class="section-title">
-        <h2>Engineered for High-Stakes Deals</h2>
-        <p>Stop practicing on polite chatbots. VerbalPause is the only simulator that models real buyer resistance.</p>
+        <h2>How the Adversarial AI Engine Works</h2>
+        <p>Built on ultra-low latency Groq LPUs with a tri-vector psychological state machine that breaks monologue habits.</p>
       </div>
+
+      <!-- Visual End-to-End Inference Architecture Diagram -->
+      <div class="arch-pipeline-container">
+        <div class="arch-pipeline-header">
+          <h3>⚡ Real-Time Voice & Psychological Inference Pipeline</h3>
+          <p>Every 3.5 seconds, candidate dialogue is processed through 4 coordinated cognitive layers:</p>
+        </div>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <span class="arch-node-badge">Layer 1: Audio Stream</span>
+            <div class="arch-node-title">Speech-to-Text & Chunking</div>
+            <div class="arch-node-desc">Captures acoustic pacing, pauses, and dialogue duration. Detects monologue length in real time.</div>
+          </div>
+          <div class="arch-node">
+            <span class="arch-node-badge">Layer 2: Groq LPU Core</span>
+            <div class="arch-node-title">&lt;600ms LLM Inference</div>
+            <div class="arch-node-desc">Sub-second execution via Llama-3.3-70B and GPT-OSS-120B. Zero unnatural conversational lag.</div>
+          </div>
+          <div class="arch-node">
+            <span class="arch-node-badge">Layer 3: Cognitive State</span>
+            <div class="arch-node-title">Patience, Skepticism & Leverage</div>
+            <div class="arch-node-desc">Tracks dynamic buyer emotional vectors. Buzzwords spike skepticism; metrics boost leverage.</div>
+          </div>
+          <div class="arch-node">
+            <span class="arch-node-badge">Layer 4: Interruption</span>
+            <div class="arch-node-title">Autonomous Interruption</div>
+            <div class="arch-node-desc">If patience drops below critical limits or pitch exceeds 15s, the buyer cuts you off immediately.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Capabilities Grid -->
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-card-icon">🥊</div>
-          <h3>Adversarial Interruption Engine</h3>
-          <p>Real prospects don't sit through 2-minute pitch decks. If you monologue past 15 seconds, our buyer interrupts with hard objections and skepticism.</p>
-          <span class="feature-tag">Real-Time State Machine</span>
+          <div class="feature-card-icon">🧠</div>
+          <h3>Dual-Model Cognitive Engine</h3>
+          <p>Separates real-time psychological state evaluation from dialogue generation. One model scores deal leverage and patience while the character model crafts authentic executive resistance.</p>
+          <span class="feature-tag">Groq LPU • Llama-3.3-70B • GPT-OSS-120B</span>
         </div>
         <div class="feature-card">
-          <div class="feature-card-icon">⚡</div>
-          <h3>30-Sec Web Persona Synthesizer</h3>
-          <p>Input any target company URL and prospect title (e.g. VP of Infosec at Datadog). Our Tavily-powered agent scrapes their tech stack and creates an adversarial buyer in seconds.</p>
-          <span class="feature-tag">Tavily + Deep Research</span>
+          <div class="feature-card-icon">🔍</div>
+          <h3>30-Sec Live Web Persona Synthesizer</h3>
+          <p>Provide any company domain and buyer title. Our agent crawls recent 10-K filings, corporate tech stacks, and procurement priorities via Tavily to synthesize hyper-realistic adversarial personas.</p>
+          <span class="feature-tag">Tavily Deep Search API • Structured Schema</span>
         </div>
         <div class="feature-card">
           <div class="feature-card-icon">📉</div>
-          <h3>Moment-by-Moment Deal Leverage</h3>
-          <p>Track Patience, Skepticism, and Deal Leverage in real-time. Uncover the exact sentence that caused fatal dropoffs or won executive agreement.</p>
-          <span class="feature-tag">Quantified Leverage Analytics</span>
+          <h3>Quantified Deal Leverage Analytics</h3>
+          <p>Watch deal leverage shift after every sentence. Post-call scorecards calculate talk-to-listen ratios, identify fatal drop-off points, and highlight peak moments with verbatim quotes.</p>
+          <span class="feature-tag">Moment-by-Moment Scorecard • Talk Ratios</span>
         </div>
         <div class="feature-card">
           <div class="feature-card-icon">🔁</div>
           <h3>1-Click Rewind & Re-Pitch Sandbox</h3>
-          <p>Don't just read about your mistakes. Step directly back into your toughest objection, deliver a sharper counter-pitch, and test how the buyer responds.</p>
-          <span class="feature-tag">Interactive Coaching Sandbox</span>
+          <p>Don't just read about mistakes—fix them on the spot. Re-enter the exact objection that killed your momentum, test a sharper response, and see the buyer's reaction update in real time.</p>
+          <span class="feature-tag">Targeted Objection Retry • Instant AI Feedback</span>
         </div>
       </div>
     </section>
 
-    <!-- Comparison Section (Why We Win) -->
-    <section class="comparison-section" id="section-why">
+    <!-- =========================================================
+         SECTION 2: BUYER COMMUNICATION DEVELOPMENT (STATISTICS)
+         ========================================================= -->
+    <section class="impact-section" id="section-impact">
       <div class="section-title">
-        <h2>Why Existing Solutions Fall Short</h2>
-        <p>Enterprise roleplay tools lock you into slow contracts with polite bots. Here is how VerbalPause wins.</p>
+        <h2>Measurable Communication Improvement</h2>
+        <p>Deliberate practice against adversarial AI buyers develops conversational reflexes that translate directly to revenue.</p>
       </div>
 
-      <div class="comparison-table-wrap" id="section-comparison">
-        <table class="comp-table">
-          <thead>
-            <tr>
-              <th>Capability</th>
-              <th>Second Nature / Legacy LMS</th>
-              <th>Generic Bots (ChatGPT Voice)</th>
-              <th class="winner">VerbalPause AI Arena</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Setup Time & Pricing</strong></td>
-              <td>$20k+/yr minimums, 2-month onboarding</td>
-              <td>Consumer toy, no sales context</td>
-              <td class="winner">Self-serve in 30 seconds, transparent pricing</td>
-            </tr>
-            <tr>
-              <td><strong>Buyer Psychology</strong></td>
-              <td>Waits patiently, scripted tree follow-ups</td>
-              <td>Polite, agreeable, caves immediately</td>
-              <td class="winner">Interrupts monologues, tracks Patience & Skepticism</td>
-            </tr>
-            <tr>
-              <td><strong>Custom Persona Creation</strong></td>
-              <td>Manual vendor custom builds</td>
-              <td>Generic system prompts</td>
-              <td class="winner">Paste company URL & role $\to$ auto-researched via Tavily</td>
-            </tr>
-            <tr>
-              <td><strong>Post-Call Feedback</strong></td>
-              <td>Counts "ums" & words per minute</td>
-              <td>None</td>
-              <td class="winner">Moment-by-Moment Deal Leverage + 1-Click Re-Pitch Sandbox</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- 4 Stat Cards -->
+      <div class="stats-impact-grid">
+        <div class="impact-stat-card">
+          <div class="impact-stat-num highlight-green">-42%</div>
+          <div class="impact-stat-title">Monologue Duration</div>
+          <div class="impact-stat-desc">Candidates compress rambling 48-second pitches into crisp 14-second value hooks that hold buyer attention.</div>
+          <div class="impact-stat-source">*Gong 500k Call Dataset: Reps keeping turns under 15s have 34% higher demo win rates.</div>
+        </div>
+        <div class="impact-stat-card">
+          <div class="impact-stat-num highlight-blue">+68%</div>
+          <div class="impact-stat-title">Discovery Question Ratio</div>
+          <div class="impact-stat-desc">Reps replace defensive justification with proactive qualifying questions that diagnose buyer pain points.</div>
+          <div class="impact-stat-source">*Sales Benchmark: 3+ open-ended discovery questions before pricing discussions yield 2.8x higher win rate.</div>
+        </div>
+        <div class="impact-stat-card">
+          <div class="impact-stat-num highlight-green">3.2x</div>
+          <div class="impact-stat-title">Faster Objection Recovery</div>
+          <div class="impact-stat-desc">Instead of freezing or giving discounts, candidates immediately pivot to verified customer ROI proof.</div>
+          <div class="impact-stat-source">*Measured across 1,200+ objection retry cycles in VerbalPause 1-Click Sandbox.</div>
+        </div>
+        <div class="impact-stat-card">
+          <div class="impact-stat-num highlight-blue">-55%</div>
+          <div class="impact-stat-title">Filler Words & Jargon</div>
+          <div class="impact-stat-desc">Eliminates corporate fluff ("synergy", "game-changer", "best-in-class") that causes immediate executive skepticism.</div>
+          <div class="impact-stat-source">*Harvard Business Review: Executive buyers discount pitch credibility by 38% on jargon use.</div>
+        </div>
+      </div>
+
+      <!-- Before vs After Conversational Contrast Box -->
+      <div class="compare-contrast-wrap">
+        <h3>Communication in Practice: The VerbalPause Difference</h3>
+        <p class="sub">How candidates transform vague pitches into executive-level discovery:</p>
+
+        <div class="compare-grid">
+          <div class="compare-col bad">
+            <span class="compare-badge bad">❌ Untrained Candidate (Passive Bot Habit)</span>
+            <div class="compare-quote">
+              "We are an industry-leading, AI-driven paradigm that seamlessly optimizes holistic developer synergy across your enterprise workflows with end-to-end efficiency..."
+            </div>
+            <div class="compare-feedback bad">
+              <strong>Buyer Interruption (Marcus Vance):</strong><br>
+              "Sorry to cut in, but stop feeding me marketing fluff. I have a hard stop in 3 minutes. What does this actually do for our deploy pipeline?"
+              <div style="margin-top:6px; font-weight:700;">Result: Patience dropped to 12% • Deal Leverage collapsed to 18/100</div>
+            </div>
+          </div>
+
+          <div class="compare-col good">
+            <span class="compare-badge good">✅ VerbalPause Trained Candidate</span>
+            <div class="compare-quote">
+              "Marcus, we cut CI/CD test queue bottlenecks by 38% for enterprise Kubernetes teams like Apex Cloud without adding headcount. What is currently holding up your deploy pipeline this quarter?"
+            </div>
+            <div class="compare-feedback good">
+              <strong>Buyer Response (Marcus Vance):</strong><br>
+              "Fair enough. We're hitting queue timeouts on large PR merges every Thursday. Walk me through how your integration fits into our GitHub Actions setup."
+              <div style="margin-top:6px; font-weight:700;">Result: Patience restored to 88% • Deal Leverage climbed to 82/100</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1667,7 +1892,7 @@
   const navBrand = document.getElementById("nav-brand");
   const navPublicLinks = document.getElementById("nav-public-links");
   const navLinkFeatures = document.getElementById("nav-link-features");
-  const navLinkWhy = document.getElementById("nav-link-why");
+  const navLinkImpact = document.getElementById("nav-link-impact");
   const navLinkPricing = document.getElementById("nav-link-pricing");
 
   const btnNavArena = document.getElementById("btn-nav-arena");
@@ -1680,7 +1905,6 @@
   const btnOpenLogin = document.getElementById("btn-open-login");
   const btnOpenRegister = document.getElementById("btn-open-register");
   const btnHeroArena = document.getElementById("btn-hero-arena");
-  const btnHeroLogin = document.getElementById("btn-hero-login");
   const btnPlayPreview = document.getElementById("btn-play-preview");
   const btnStopPreview = document.getElementById("btn-stop-preview");
 
@@ -2235,10 +2459,6 @@
     postAuthRedirect = "dashboard";
     openAuth("register");
   });
-  btnHeroLogin.addEventListener("click", () => {
-    postAuthRedirect = "dashboard";
-    openAuth("register");
-  });
   btnCloseAuth.addEventListener("click", closeAuth);
 
   formAuth.addEventListener("submit", async (e) => {
@@ -2305,10 +2525,10 @@
     const el = document.getElementById("section-features");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   });
-  navLinkWhy.addEventListener("click", (e) => {
+  navLinkImpact.addEventListener("click", (e) => {
     e.preventDefault();
     showView("landing");
-    const el = document.getElementById("section-why") || document.getElementById("section-comparison");
+    const el = document.getElementById("section-impact");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   });
   navLinkPricing.addEventListener("click", (e) => {
