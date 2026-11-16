@@ -298,60 +298,6 @@
     background: var(--bg-surface);
   }
 
-  /* Audio Preview Bar */
-  .audio-preview-box {
-    background: var(--bg-card);
-    border: 1px solid var(--border-strong);
-    border-radius: 14px;
-    padding: 18px 24px;
-    max-width: 680px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    text-align: left;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-  }
-  .audio-preview-info h4 { font-size: 14px; font-weight: 700; }
-  .audio-preview-info p { font-size: 12.5px; color: var(--text-secondary); margin: 2px 0 0; }
-  .btn-play-preview {
-    background: #ffffff;
-    color: #000000;
-    border: none;
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
-  .btn-play-preview:hover { background: #e2e8f0; }
-  .btn-play-preview.playing {
-    background: #3b82f6;
-    color: #ffffff;
-    box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
-  }
-  .btn-stop-preview {
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    padding: 9px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-    display: none;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn-stop-preview:hover {
-    background: rgba(239, 68, 68, 0.25);
-    border-color: #ef4444;
-  }
 
   /* Metric Ticker */
   .metrics-grid {
@@ -395,7 +341,7 @@
      ========================================================= */
   .model-showcase-section {
     max-width: 1160px;
-    margin: 40px auto 90px;
+    margin: 40px auto 48px;
     padding: 0 24px;
   }
   .model-showcase-header {
@@ -465,6 +411,41 @@
   .model-showcase-meta .feature-arrow-link:hover {
     color: #c084fc;
     transform: translateX(3px);
+  }
+
+  .btn-demo-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-demo-trigger:hover {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: #c084fc;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.25);
+  }
+  .btn-demo-trigger.playing {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #f87171;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+  }
+  .btn-demo-trigger.playing:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+  }
+  .btn-demo-trigger.playing .sw-bar {
+    background: #f87171;
   }
 
   /* Soft Tinted Card Container (Matching Image 2 Lavender/Violet Box) */
@@ -702,31 +683,32 @@
      ========================================================= */
   .impact-section {
     max-width: 1160px;
-    margin: 50px auto 70px;
+    margin: 30px auto 60px;
     padding: 0 24px;
   }
   .impact-section-header {
     text-align: left;
-    margin-bottom: 36px;
+    margin-bottom: 22px;
   }
   .impact-section-header h2 {
     font-size: 32px;
     font-weight: 800;
     letter-spacing: -0.03em;
     color: #ffffff;
-    margin-bottom: 8px;
+    margin: 6px 0 8px 0;
   }
   .impact-section-header p {
     font-size: 15px;
     color: var(--text-secondary);
     max-width: 680px;
+    margin: 0;
   }
 
   .stats-impact-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
   }
   @media (max-width: 900px) {
     .stats-impact-grid { grid-template-columns: repeat(2, 1fr); }
@@ -801,21 +783,24 @@
     background: #0f121a;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 18px;
-    padding: 32px 28px;
+    padding: 24px 28px;
     box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
   }
+  .compare-contrast-header {
+    text-align: left;
+    margin-bottom: 18px;
   }
-  .compare-contrast-wrap h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    text-align: center;
+  .compare-contrast-header h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.02em;
   }
-  .compare-contrast-wrap p.sub {
+  .compare-contrast-header p {
     font-size: 13.5px;
-    color: var(--text-secondary);
-    text-align: center;
-    margin-bottom: 24px;
+    color: #9ca3af;
+    margin: 0;
   }
   .compare-grid {
     display: grid;
@@ -1605,17 +1590,6 @@
       
       <div class="hero-ctas">
         <button class="btn-hero-primary" id="btn-hero-arena">⚔️ Enter Voice Arena Free &rarr;</button>
-        <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
-          <button class="btn-play-preview" id="btn-play-preview">🔊 Play 10s Demo</button>
-          <div class="mini-soundwave" id="hero-soundwave">
-            <span class="sw-bar"></span>
-            <span class="sw-bar"></span>
-            <span class="sw-bar"></span>
-            <span class="sw-bar"></span>
-            <span class="sw-bar"></span>
-          </div>
-          <button class="btn-stop-preview" id="btn-stop-preview">⏹ Stop Demo</button>
-        </div>
       </div>
     </div>
 
@@ -1659,7 +1633,19 @@
           <div class="model-showcase-meta">
             <h3>Autonomous Interruption Engine</h3>
             <p>Monologue analysis cuts you off if you ramble for &gt;15s or lean on generic marketing buzzwords without ROI proof.</p>
-            <a class="feature-arrow-link" id="link-play-demo-col" href="#">Hear 10-second demo cut-off &rarr;</a>
+            <div style="display:inline-flex; align-items:center; gap:8px;">
+              <button class="btn-demo-trigger" id="btn-col-demo-trigger" type="button" aria-label="Play 10-second voice cut-off demo">
+                <span id="demo-col-icon">🔊</span>
+                <span id="demo-col-text">Hear 10-second demo cut-off &rarr;</span>
+                <div class="mini-soundwave" id="demo-col-soundwave">
+                  <span class="sw-bar"></span>
+                  <span class="sw-bar"></span>
+                  <span class="sw-bar"></span>
+                  <span class="sw-bar"></span>
+                  <span class="sw-bar"></span>
+                </div>
+              </button>
+            </div>
           </div>
           <div class="mockup-container">
             <div class="mockup-white-card">
@@ -1817,8 +1803,10 @@
 
       <!-- Before vs After Conversational Contrast Box -->
       <div class="compare-contrast-wrap">
-        <h3>Communication in Practice: The VerbalPause Difference</h3>
-        <p class="sub">How candidates transform vague pitches into executive-level discovery:</p>
+        <div class="compare-contrast-header">
+          <h3>Communication in Practice: The VerbalPause Difference</h3>
+          <p>How candidates transform vague pitches into executive-level discovery:</p>
+        </div>
 
         <div class="compare-grid">
           <div class="compare-col bad">
@@ -2172,9 +2160,11 @@
   const btnOpenLogin = document.getElementById("btn-open-login");
   const btnOpenRegister = document.getElementById("btn-open-register");
   const btnHeroArena = document.getElementById("btn-hero-arena");
-  const btnPlayPreview = document.getElementById("btn-play-preview");
-  const btnStopPreview = document.getElementById("btn-stop-preview");
-  const heroSoundwave = document.getElementById("hero-soundwave");
+  const btnColDemoTrigger = document.getElementById("btn-col-demo-trigger");
+  const demoColIcon = document.getElementById("demo-col-icon");
+  const demoColText = document.getElementById("demo-col-text");
+  const demoColSoundwave = document.getElementById("demo-col-soundwave");
+  let isDemoPlaying = false;
 
   const btnTierFree = document.getElementById("btn-tier-free");
   let postAuthRedirect = null; // "persona" | "dashboard" | null
@@ -2815,11 +2805,13 @@
 
   btnHeroArena.addEventListener("click", enterArenaWithAuth);
   btnTierFree.addEventListener("click", enterArenaWithAuth);
-  const linkPlayDemoCol = document.getElementById("link-play-demo-col");
-  if (linkPlayDemoCol) {
-    linkPlayDemoCol.addEventListener("click", (e) => {
-      e.preventDefault();
-      btnPlayPreview.click();
+  if (btnColDemoTrigger) {
+    btnColDemoTrigger.addEventListener("click", () => {
+      if (isDemoPlaying) {
+        stopAudioDemo();
+      } else {
+        playAudioDemo();
+      }
     });
   }
   const linkSynthCol = document.getElementById("link-synth-col");
@@ -2848,7 +2840,7 @@
     else showView("landing");
   });
 
-  // Audio Demo Preview with Stop Button
+  // Audio Demo Preview in Column 1 with Toggle Stop
   let previewSafetyTimer = null;
 
   function stopAudioDemo() {
@@ -2859,24 +2851,33 @@
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-    btnPlayPreview.textContent = "🔊 Play 10s Demo";
-    btnPlayPreview.classList.remove("playing");
-    btnPlayPreview.style.display = "inline-flex";
-    btnStopPreview.style.display = "none";
-    if (heroSoundwave) heroSoundwave.classList.remove("active");
+    isDemoPlaying = false;
+    if (btnColDemoTrigger) {
+      btnColDemoTrigger.classList.remove("playing");
+      if (demoColIcon) demoColIcon.textContent = "🔊";
+      if (demoColText) demoColText.textContent = "Hear 10-second demo cut-off →";
+    }
+    if (demoColSoundwave) {
+      demoColSoundwave.classList.remove("active");
+    }
   }
 
-  btnPlayPreview.addEventListener("click", () => {
+  function playAudioDemo() {
     const previewText = "Sorry to cut in, but I have a hard stop in 3 minutes. What is the actual bottom-line ROI here?";
     if (!window.speechSynthesis) {
       alert("Browser Speech Synthesis is not supported in this browser.");
       return;
     }
     window.speechSynthesis.cancel();
-    btnPlayPreview.textContent = "🔊 Playing Demo...";
-    btnPlayPreview.classList.add("playing");
-    btnStopPreview.style.display = "inline-flex";
-    if (heroSoundwave) heroSoundwave.classList.add("active");
+    isDemoPlaying = true;
+    if (btnColDemoTrigger) {
+      btnColDemoTrigger.classList.add("playing");
+      if (demoColIcon) demoColIcon.textContent = "⏹";
+      if (demoColText) demoColText.textContent = "Stop demo cut-off";
+    }
+    if (demoColSoundwave) {
+      demoColSoundwave.classList.add("active");
+    }
 
     const utter = new SpeechSynthesisUtterance(previewText);
     utter.rate = 1.05;
@@ -2885,9 +2886,7 @@
     utter.onerror = stopAudioDemo;
     window.speechSynthesis.speak(utter);
     previewSafetyTimer = setTimeout(stopAudioDemo, 8000);
-  });
-
-  btnStopPreview.addEventListener("click", stopAudioDemo);
+  }
 
   // API URL can be configured programmatically or via localStorage: localStorage.setItem("verbalpause_api_url", "https://...")
   window.setApiUrl = (url) => {
