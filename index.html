@@ -1552,10 +1552,10 @@
 
 <!-- Header Navigation -->
 <header>
-  <div class="brand" id="nav-brand" style="cursor:pointer;" title="VerbalPause Home">
+  <a class="brand" id="nav-brand" href="/" style="cursor:pointer; text-decoration:none;" title="VerbalPause Home">
     <div class="brand-icon">VP</div>
     <span>VerbalPause</span>
-  </div>
+  </a>
 
   <nav class="nav-links">
     <div class="nav-public-links" id="nav-public-links">
@@ -2775,9 +2775,18 @@
   });
 
   // Navigation Links & Triggers
-  navBrand.addEventListener("click", () => {
-    if (authToken) showView("dashboard");
-    else showView("landing");
+  navBrand.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (viewCall && viewCall.style.display === "flex") {
+      clearInterval(timerInterval);
+      if (synth) synth.cancel();
+      stopMic();
+    }
+    showView("landing");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (window.location.hash) {
+      history.pushState(null, "", window.location.pathname);
+    }
   });
   navLinkFeatures.addEventListener("click", (e) => {
     e.preventDefault();
