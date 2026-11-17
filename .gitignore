@@ -33,3 +33,5 @@ htmlcov/
 *.sqlite3
 .DS_Store
 Thumbs.db
+node_modules/
+.neon
