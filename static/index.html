@@ -100,6 +100,11 @@
     align-items: center;
     gap: 12px;
   }
+  #auth-authed {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   .btn-ghost {
     background: transparent;
     border: 1px solid var(--border);
@@ -1879,6 +1884,14 @@
       padding: 4px 8px;
       font-size: 11px;
     }
+    #auth-authed {
+      gap: 6px !important;
+      flex-wrap: nowrap;
+    }
+    #btn-nav-logout {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
 
     /* Disable scroll fade-in opacity lock on mobile for instant visibility */
     .reveal {
@@ -2335,8 +2348,67 @@
     }
   }
 
+  /* MOBILE PHONES (<= 600px) */
+  @media (max-width: 600px) {
+    header {
+      padding: 6px 10px;
+      gap: 6px;
+      min-height: 52px;
+    }
+    .brand span {
+      display: none !important;
+    }
+    .streak-text {
+      display: none !important;
+    }
+    #auth-authed {
+      gap: 5px !important;
+    }
+    #auth-authed .btn-ghost {
+      padding: 5px 8px;
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+    .streak-badge {
+      padding: 4px 7px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    #btn-nav-logout {
+      color: #f87171 !important;
+      border-color: rgba(239, 68, 68, 0.35) !important;
+      background: rgba(239, 68, 68, 0.08);
+      padding: 5px 8px !important;
+      font-size: 11.5px !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+    }
+    #btn-nav-logout:hover {
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #ffffff !important;
+    }
+  }
+
   /* SMALL MOBILE DEVICES (<= 480px) */
   @media (max-width: 480px) {
+    header {
+      padding: 6px 8px;
+    }
+    #auth-authed {
+      gap: 4px !important;
+    }
+    #auth-authed .btn-ghost {
+      padding: 5px 7px;
+      font-size: 11px;
+    }
+    .streak-badge {
+      padding: 3px 6px;
+      font-size: 10.5px;
+    }
+    #btn-nav-logout {
+      padding: 5px 7px !important;
+      font-size: 11px !important;
+    }
     .metrics-grid {
       grid-template-columns: 1fr 1fr;
       gap: 8px;
@@ -2364,6 +2436,32 @@
       font-size: 17px;
     }
   }
+
+  /* ULTRA COMPACT MOBILE (<= 360px) */
+  @media (max-width: 360px) {
+    #auth-authed {
+      gap: 3px !important;
+    }
+    #auth-authed .btn-ghost {
+      padding: 4px 5px;
+      font-size: 10.5px;
+    }
+    .streak-badge {
+      padding: 3px 5px;
+      font-size: 10px;
+    }
+    #btn-nav-logout {
+      padding: 4px 6px !important;
+      font-size: 10.5px !important;
+    }
+  }
+
+  /* TINY SCREENS (<= 330px) */
+  @media (max-width: 330px) {
+    .nav-btn-text {
+      display: none !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -2389,10 +2487,10 @@
       <button class="btn-ghost" id="btn-open-login">Sign In</button>
       <button class="btn-primary" id="btn-open-register">Get Started</button>
     </div>
-    <div id="auth-authed" style="display:none; align-items:center; gap:10px;">
-      <button class="btn-ghost" id="btn-nav-arena" style="color:var(--text-primary); font-weight:600;">⚔️ Arena</button>
-      <span class="streak-badge" id="nav-streak-badge">🔥 0-Day Streak</span>
-      <button class="btn-ghost" id="btn-nav-dashboard">Dashboard</button>
+    <div id="auth-authed" style="display:none; align-items:center;">
+      <button class="btn-ghost" id="btn-nav-arena" style="color:var(--text-primary); font-weight:600;"><span class="nav-btn-icon">⚔️</span><span class="nav-btn-text"> Arena</span></button>
+      <span class="streak-badge" id="nav-streak-badge">🔥 0<span class="streak-text">-Day Streak</span></span>
+      <button class="btn-ghost" id="btn-nav-dashboard"><span class="nav-btn-icon">📊</span><span class="nav-btn-text"> Dashboard</span></button>
       <button class="btn-ghost" id="btn-nav-logout" title="Sign Out">Sign Out</button>
     </div>
   </div>
@@ -3246,8 +3344,8 @@
       if (navPublicLinks) navPublicLinks.style.display = "none";
       authUnauthed.style.display = "none";
       authAuthed.style.display = "flex";
-      const streakCount = user.current_streak || 0;
-      navStreakBadge.textContent = streakCount === 1 ? "🔥 1-Day Streak" : `🔥 ${streakCount}-Day Streak`;
+      const streakCount = Number(user.current_streak) || 0;
+      navStreakBadge.innerHTML = `🔥 ${streakCount}<span class="streak-text">-Day Streak</span>`;
       btnBackToDash.style.display = "inline-flex";
     } else {
       if (navPublicLinks) navPublicLinks.style.display = "flex";
