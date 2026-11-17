@@ -2485,7 +2485,10 @@
 
 <script>
   // API Configuration
-  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || "";
+  const PROD_API_URL = "https://verbalpause.onrender.com";
+  const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  let defaultApiBase = isLocalhost ? "" : PROD_API_URL;
+  let apiBase = localStorage.getItem("verbalpause_api_url") || window.VERBALPAUSE_API_URL || defaultApiBase;
   let authToken = localStorage.getItem("verbalpause_token") || "";
   let currentUser = null;
 
